@@ -8,15 +8,18 @@ namespace FoodyWeb.Controllers
 {
     public class CategoryController : Controller
     {
-        public readonly ICategoryRepository _categoryRepository;
-        public CategoryController(ICategoryRepository db)
+        public readonly  IUnitOfWork _unitOfWork;
+
+
+        public CategoryController(IUnitOfWork u)
+
         {
-            _categoryRepository = db;
+            _unitOfWork = u;
         }
 
         public IActionResult Index()
         {
-            List<Category> objCategoryList = _categoryRepository.GetAll().ToList();
+            List<Category> objCategoryList = _unitOfWork.Category.GetAll().ToList();
                return View(objCategoryList);
         }
 
@@ -33,8 +36,8 @@ namespace FoodyWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                _categoryRepository.Add(obj);
-                _categoryRepository.Save();
+                _unitOfWork.Category.Add(obj);
+                _unitOfWork.Save();
                 TempData["success"] = "Category has been created successfully";
 
                 return RedirectToAction("Index");
@@ -49,7 +52,7 @@ namespace FoodyWeb.Controllers
             {
                 return NotFound();
             }
-            Category categoryFromDb = _categoryRepository.Get(u=>u.Id == id);
+            Category categoryFromDb = _unitOfWork.Category.Get(u=>u.Id == id);
             if( categoryFromDb == null)
             {
                 return NotFound();
@@ -61,8 +64,8 @@ namespace FoodyWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                _categoryRepository.Update(obj);
-                _categoryRepository.Save();
+                _unitOfWork.Category.Update(obj);
+                _unitOfWork.Save();
                 TempData["success"] = "Category has been updated successfully";
                 return RedirectToAction("Index");
             }
@@ -77,7 +80,7 @@ namespace FoodyWeb.Controllers
             {
                 return NotFound();
             }
-            Category categoryFromDb = _categoryRepository.Get(u => u.Id == id);
+            Category categoryFromDb = _unitOfWork.Category.Get(u => u.Id == id);
             if (categoryFromDb == null)
             {
                 return NotFound();
@@ -88,14 +91,14 @@ namespace FoodyWeb.Controllers
         [HttpPost,  ActionName("Delete")]
         public IActionResult DeletePOST(int? id)
         {
-            Category? obj = _categoryRepository.Get(u => u.Id == id);
+            Category? obj = _unitOfWork.Category.Get(u => u.Id == id);
             if (obj == null)
             { 
                 return NotFound();
             }
 
-            _categoryRepository.Remove(obj);
-            _categoryRepository.Save();
+            _unitOfWork.Category.Remove(obj);
+            _unitOfWork.Save();
                 TempData["success"] = "Category has been deleted successfully";
             return RedirectToAction("Index");
 
