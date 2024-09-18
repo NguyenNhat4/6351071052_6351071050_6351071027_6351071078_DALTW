@@ -40,9 +40,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Bulky.DataAccess\Bulky.DataAccess.csproj" />
-    <ProjectReference Include="..\Bulky.Models\Bulky.Models.csproj" />
-	  <ProjectReference Include="..\Bulky.utility\Bulky.utility.csproj" />
+    <ProjectReference Include="..\Bulky.DataAccess\Foody.DataAccess.csproj" />
+    <ProjectReference Include="..\Bulky.Models\Foody.Models.csproj" />
+	  <ProjectReference Include="..\Bulky.utility\Foody.utility.csproj" />
   </ItemGroup>
 
 </Project>

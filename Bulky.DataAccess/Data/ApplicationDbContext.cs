@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Bulky.Models;
-namespace Bulky.DataAccess.Data
+using Foody.Models;
+namespace Foody.DataAccess.Data
 {
     public class ApplicationDbContext : DbContext
     {

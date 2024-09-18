@@ -1,4 +1,4 @@
-namespace Bulky.Models
+namespace Foody.Models
 {
     public class ErrorViewModel
     {

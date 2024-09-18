@@ -1,10 +1,10 @@
-﻿using Bulky.Models;
+﻿using Foody.Models;
 using Microsoft.AspNetCore.Mvc;
 
-using Bulky.DataAccess.Data;
-using Bulky.DataAccess.Repository.IRepository;
+using Foody.DataAccess.Data;
+using Foody.DataAccess.Repository.IRepository;
 
-namespace BulkyWeb.Controllers
+namespace FoodyWeb.Controllers
 {
     public class CategoryController : Controller
     {

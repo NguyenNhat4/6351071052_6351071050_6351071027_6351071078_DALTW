@@ -1,8 +1,8 @@
 
-using Bulky.DataAccess.Data;
-using Bulky.DataAccess.Repository;
-using Bulky.DataAccess.Repository.IRepository;
-using Bulky.Models;
+using Foody.DataAccess.Data;
+using Foody.DataAccess.Repository;
+using Foody.DataAccess.Repository.IRepository;
+using Foody.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

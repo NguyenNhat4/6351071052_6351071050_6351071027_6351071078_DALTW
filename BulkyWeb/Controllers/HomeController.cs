@@ -1,8 +1,8 @@
-using Bulky.Models;
+using Foody.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace BulkyWeb.Controllers
+namespace FoodyWeb.Controllers
 {
     public class HomeController : Controller
     {
