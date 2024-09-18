@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 namespace Bulky.DataAccess.Repository
 {
 
+
     public class Repository<T> : IRepository<T> where T : class
     {
         private readonly ApplicationDbContext _db;
@@ -27,22 +28,23 @@ namespace Bulky.DataAccess.Repository
         }
   
 
-        public void Delete(int id)
+        public void Remove(T entity)
         {
-            throw new NotImplementedException();
+            dbSet.Remove(entity);
         }
 
         public IEnumerable<T> GetAll()
         {
             IQueryable<T> query = dbSet;
             return query.ToList();  
-            }
+          
+        }
 
         public T Get(Expression<Func<T, bool>> filter)
         {
             IQueryable<T> query = dbSet;
             query = query.Where(filter);
-            return query.FirstOrDefault();
+            return query.FirstOrDefault();  
         }
 
         public void RemoveRange(IEnumerable<T> filter)
@@ -51,6 +53,11 @@ namespace Bulky.DataAccess.Repository
         }
 
         public void Update(T entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(int id)
         {
             throw new NotImplementedException();
         }

@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace Bulky.DataAccess.Repository.IRepository
 {
-    public interface ICategoryRepository : IRepository<Category>
+    public interface ICategoryRepository : IRepository<Category> 
     {
+        void Remove(Category obj);
+        void Save();
         void Update(Category obj);
     }
 }
