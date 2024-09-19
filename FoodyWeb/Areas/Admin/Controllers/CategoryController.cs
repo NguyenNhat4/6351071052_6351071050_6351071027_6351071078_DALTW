@@ -4,11 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Foody.DataAccess.Data;
 using Foody.DataAccess.Repository.IRepository;
 
-namespace FoodyWeb.Controllers
+namespace FoodyWeb.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
-        public readonly  IUnitOfWork _unitOfWork;
+        public readonly IUnitOfWork _unitOfWork;
 
 
         public CategoryController(IUnitOfWork u)
@@ -20,7 +21,7 @@ namespace FoodyWeb.Controllers
         public IActionResult Index()
         {
             List<Category> objCategoryList = _unitOfWork.Category.GetAll().ToList();
-               return View(objCategoryList);
+            return View(objCategoryList);
         }
 
 
@@ -43,17 +44,17 @@ namespace FoodyWeb.Controllers
                 return RedirectToAction("Index");
             }
             return View();
-           
+
         }
 
         public IActionResult Edit(int? id)
         {
-            if (id ==null || id==0)
+            if (id == null || id == 0)
             {
                 return NotFound();
             }
-            Category categoryFromDb = _unitOfWork.Category.Get(u=>u.Id == id);
-            if( categoryFromDb == null)
+            Category categoryFromDb = _unitOfWork.Category.Get(u => u.Id == id);
+            if (categoryFromDb == null)
             {
                 return NotFound();
             }
@@ -86,20 +87,20 @@ namespace FoodyWeb.Controllers
                 return NotFound();
             }
             return View(categoryFromDb);
-        } 
+        }
 
-        [HttpPost,  ActionName("Delete")]
+        [HttpPost, ActionName("Delete")]
         public IActionResult DeletePOST(int? id)
         {
             Category? obj = _unitOfWork.Category.Get(u => u.Id == id);
             if (obj == null)
-            { 
+            {
                 return NotFound();
             }
 
             _unitOfWork.Category.Remove(obj);
             _unitOfWork.Save();
-                TempData["success"] = "Category has been deleted successfully";
+            TempData["success"] = "Category has been deleted successfully";
             return RedirectToAction("Index");
 
 
