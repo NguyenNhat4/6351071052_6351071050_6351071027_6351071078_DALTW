@@ -21,7 +21,6 @@ namespace Foody.DataAccess.Repository
             _db = db;
             this.dbSet = _db.Set<T>();
         }
-
         public void Add(T entity)
         {
             dbSet.Add(entity);  
@@ -57,9 +56,5 @@ namespace Foody.DataAccess.Repository
             throw new NotImplementedException();
         }
 
-        public void Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

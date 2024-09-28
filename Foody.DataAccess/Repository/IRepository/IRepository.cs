@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -14,8 +15,9 @@ namespace Foody.DataAccess.Repository.IRepository
             T Get(Expression<Func<T, bool>> filter);
             void Add(T entity);
             void Update(T entity);
-            void Delete(int id);
             void RemoveRange(IEnumerable<T> entity);
-        }
-    
+            public void Remove(T entity);
+     
+    }
+
 }
