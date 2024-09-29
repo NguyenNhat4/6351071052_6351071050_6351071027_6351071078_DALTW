@@ -23,15 +23,41 @@
             <thead>
                 <tr>
                     <th>
-                        Product Name
+                        Name
                     </th>
                     <th>
-                        Display Order
+                        Price
+                    </th>
+                    <th>
+                        Category
                     </th>
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
+          <tbody>
+                @foreach (var obj in Model.OrderBy(u => u.Name))
+                {
+                    <tr>
+                        <td>@obj.Name</td>
+                        <td>
+                            @obj.Price
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            <div class="w-75 btn-group" role="group">
+                                <a asp-controller="Product" asp-action="Edit" asp-route-id="@obj.Id" class="btn btn-primary mx-2">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </a>
+                                <a asp-controller="Product" asp-action="Delete" asp-route-id="@obj.Id" class="btn btn-danger mx-2">
+                                    <i class="bi bi-trash-fill"></i> Delete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+                
                
             </tbody>
         </table>
