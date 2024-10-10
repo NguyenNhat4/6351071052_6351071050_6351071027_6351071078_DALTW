@@ -28,7 +28,19 @@ namespace Foody.DataAccess.Data
                 new Product
                 {
                     Id = 1,
-                    Name = "Sting",
+                    Name = "Prime",
+                    Description = "",
+                    ListPrice = 99,
+                    Price = 90,
+                    Price50 = 85,
+                    Price100 = 80,
+                    CategoryId = 1,
+                    imageUrl = ""
+                },
+                new Product
+                {
+                    Id = 2,
+                    Name = "Coca Cola",
                     Description = "",
                     ListPrice = 99,
                     Price = 90,
@@ -37,6 +49,7 @@ namespace Foody.DataAccess.Data
                     CategoryId = 1,
                     imageUrl = ""
                 }
+
                 );
         }
     }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Foody.DataAccess.Data;
 using Foody.DataAccess.Repository.IRepository;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FoodyWeb.Areas.Admin.Controllers
 {
@@ -21,12 +22,21 @@ namespace FoodyWeb.Areas.Admin.Controllers
         public IActionResult Index()
         {
             List<Product> objProductList = _unitOfWork.Product.GetAll().ToList();
+           
+
             return View(objProductList);
         }
 
 
         public IActionResult Create()
         {
+            IEnumerable<SelectListItem> CategoryList = _unitOfWork.Category.GetAll().Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.Id.ToString()
+            });
+            //ViewBag.CategoryList = CategoryList;
+            ViewData["CategoryList"] = CategoryList;
 
             return View();
         }
@@ -71,7 +81,6 @@ namespace FoodyWeb.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
             return View();
-
         }
 
 

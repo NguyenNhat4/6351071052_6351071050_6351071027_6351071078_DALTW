@@ -9,7 +9,7 @@ namespace Foody.DataAccess.Repository.IRepository
 {
     public interface ICategoryRepository : IRepository<Category> 
     {
-        void Remove(Category obj);
+      
         void Update(Category obj);
     }
 }
