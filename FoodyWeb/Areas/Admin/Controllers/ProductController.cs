@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Foody.DataAccess.Data;
 using Foody.DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Foody.Models.ViewModels;
 
 namespace FoodyWeb.Areas.Admin.Controllers
 {
@@ -30,24 +31,27 @@ namespace FoodyWeb.Areas.Admin.Controllers
 
         public IActionResult Create()
         {
-            IEnumerable<SelectListItem> CategoryList = _unitOfWork.Category.GetAll().Select(i => new SelectListItem
-            {
-                Text = i.Name,
-                Value = i.Id.ToString()
-            });
-            //ViewBag.CategoryList = CategoryList;
-            ViewData["CategoryList"] = CategoryList;
 
-            return View();
+            ProductVM productVM = new ProductVM()
+            {
+                product = new Product(),
+                categoryList = _unitOfWork.Category.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                })
+            };
+
+            return View(productVM);
         }
 
 
         [HttpPost]
-        public IActionResult Create(Product obj)
+        public IActionResult Create(ProductVM obj)  
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.Product.Add(obj);
+                _unitOfWork.Product.Add(obj.product);
                 _unitOfWork.Save();
                 TempData["success"] = "Product has been created successfully";
 
@@ -70,6 +74,7 @@ namespace FoodyWeb.Areas.Admin.Controllers
             }
             return View(ProductFromDb);
         }
+
         [HttpPost]
         public IActionResult Edit(Product obj)
         {
@@ -97,6 +102,7 @@ namespace FoodyWeb.Areas.Admin.Controllers
             }
             return View(ProductFromDb);
         }
+
 
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePOST(int? id)
