@@ -64,6 +64,7 @@ namespace FoodyWeb.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+              
                 _unitOfWork.Product.Add(obj.product);
                 _unitOfWork.Save();
                 TempData["success"] = "Product has been created successfully";
