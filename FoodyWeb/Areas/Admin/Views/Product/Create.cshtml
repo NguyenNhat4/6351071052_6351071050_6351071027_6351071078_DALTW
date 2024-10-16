@@ -42,6 +42,10 @@
                         <label asp-for="product.Price100" class="ms-2"></label>
                         <span asp-validation-for="product.Price100" class="text-danger"></span>
                     </div>
+                    <div class="form-floating py-2 col-12">
+                        <input type="file"  class="form-control border-0 shadow" />
+                        <label asp-for="product.imageUrl" class="ms-2"></label>
+                    </div>
 
                     <div class="form-floating py-2 col-12">
                         <select asp-for="product.CategoryId" asp-items="@Model.categoryList" class="form-select border-0 shadow">

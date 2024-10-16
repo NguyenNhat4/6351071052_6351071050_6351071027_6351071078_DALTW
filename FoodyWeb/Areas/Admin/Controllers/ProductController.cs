@@ -29,7 +29,7 @@ namespace FoodyWeb.Areas.Admin.Controllers
         }
 
 
-        public IActionResult Create()
+        public IActionResult Upsert(int? id)
         {
 
             ProductVM productVM = new ProductVM()
@@ -42,12 +42,22 @@ namespace FoodyWeb.Areas.Admin.Controllers
                 })
             };
 
+            if(id == null || id == 0)   
+            {
             return View(productVM);
+            }
+            else
+            {
+                productVM.product = _unitOfWork.Product.Get(u => u.Id == id);
+            }
+
         }
 
 
+
+
         [HttpPost]
-        public IActionResult Create(ProductVM obj)  
+        public IActionResult Upsert(ProductVM obj)  
         {
             if (ModelState.IsValid)
             {
