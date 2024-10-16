@@ -64,14 +64,32 @@ namespace FoodyWeb.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-              
-                _unitOfWork.Product.Add(obj.product);
-                _unitOfWork.Save();
-                TempData["success"] = "Product has been created successfully";
+                if (obj.product.Id == 0)
+                {
+                    _unitOfWork.Product.Add(obj.product);
+                    _unitOfWork.Save();
+                    TempData["success"] = "Product has been created successfully";
+                }
+                else
+                {
+                    _unitOfWork.Product.Update(obj.product);
+                    _unitOfWork.Save();
+                    TempData["success"] = "Product has been updated successfully";
+                }
+                
+
 
                 return RedirectToAction("Index");
             }
-            return View();
+
+            obj.categoryList = _unitOfWork.Category.GetAll().Select(i => new SelectListItem
+            {
+                Text = i.Name,
+                Value = i.Id.ToString()
+            });
+
+
+            return View(obj);
 
         }
 
