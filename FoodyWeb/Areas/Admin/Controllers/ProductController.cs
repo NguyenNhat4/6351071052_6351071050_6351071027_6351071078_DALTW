@@ -44,11 +44,14 @@ namespace FoodyWeb.Areas.Admin.Controllers
 
             if(id == null || id == 0)   
             {
+                //create
             return View(productVM);
             }
             else
             {
+                // update
                 productVM.product = _unitOfWork.Product.Get(u => u.Id == id);
+                return View(productVM);
             }
 
         }
@@ -57,7 +60,7 @@ namespace FoodyWeb.Areas.Admin.Controllers
 
 
         [HttpPost]
-        public IActionResult Upsert(ProductVM obj)  
+        public IActionResult Upsert(ProductVM obj, IFormFile? file)  
         {
             if (ModelState.IsValid)
             {
@@ -71,33 +74,7 @@ namespace FoodyWeb.Areas.Admin.Controllers
 
         }
 
-        public IActionResult Edit(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-            Product ProductFromDb = _unitOfWork.Product.Get(u => u.Id == id);
-            if (ProductFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(ProductFromDb);
-        }
-
-        [HttpPost]
-        public IActionResult Edit(Product obj)
-        {
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.Product.Update(obj);
-                _unitOfWork.Save();
-                TempData["success"] = "Product has been updated successfully";
-                return RedirectToAction("Index");
-            }
-            return View();
-        }
-
+      
 
         public IActionResult Delete(int? id)
         {
