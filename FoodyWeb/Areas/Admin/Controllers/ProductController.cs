@@ -5,6 +5,7 @@ using Foody.DataAccess.Data;
 using Foody.DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Foody.Models.ViewModels;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
 namespace FoodyWeb.Areas.Admin.Controllers
 {
@@ -12,12 +13,15 @@ namespace FoodyWeb.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         public readonly IUnitOfWork _unitOfWork;
+        private readonly IWebHostEnvironment _webhostEnvironment;
 
 
-        public ProductController(IUnitOfWork u)
+
+        public ProductController(IUnitOfWork u, IWebHostEnvironment webHostEnvironment)
 
         {
             _unitOfWork = u;
+            _webhostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Index()
@@ -64,6 +68,19 @@ namespace FoodyWeb.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                string wwRootPath = _webhostEnvironment.WebRootPath;
+                if (file != null) 
+                { 
+
+                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                string production = Path.Combine(wwRootPath , @"\images\product");
+                    using (var fileStream = new FileStream(Path.Combine(production, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    } 
+                    obj.product.imageUrl = @"\images\product\" + fileName;
+                } 
+
                 if (obj.product.Id == 0)
                 {
                     _unitOfWork.Product.Add(obj.product);
@@ -81,15 +98,19 @@ namespace FoodyWeb.Areas.Admin.Controllers
 
                 return RedirectToAction("Index");
             }
-
-            obj.categoryList = _unitOfWork.Category.GetAll().Select(i => new SelectListItem
+            else
             {
-                Text = i.Name,
-                Value = i.Id.ToString()
-            });
+
+                obj.categoryList = _unitOfWork.Category.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                });
 
 
-            return View(obj);
+                return View(obj);
+            }
+
 
         }
 
