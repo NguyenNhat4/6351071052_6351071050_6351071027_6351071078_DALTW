@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -42,6 +43,7 @@ namespace Foody.Models
         [Required]
         public int CategoryId { get; set; }
         [Url]
+        [ValidateNever]
         public string? imageUrl { get; set; }
 
 

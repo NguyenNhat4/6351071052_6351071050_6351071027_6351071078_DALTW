@@ -80,6 +80,7 @@ namespace FoodyWeb.Areas.Admin.Controllers
                     // Delete existing image file
                     if (!string.IsNullOrEmpty(obj.product.imageUrl))
                     {
+                      
                         string existingImagePath = Path.Combine(wwRootPath, obj.product.imageUrl.TrimStart('\\'));
                         if (System.IO.File.Exists(existingImagePath))
                         {
@@ -99,7 +100,7 @@ namespace FoodyWeb.Areas.Admin.Controllers
                 }
 
                 if (obj.product.Id == 0)
-                {
+                {  
                     _unitOfWork.Product.Add(obj.product);
                     _unitOfWork.Save();
                     TempData["success"] = "Product has been created successfully";
@@ -114,7 +115,7 @@ namespace FoodyWeb.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
             else
-            {
+            { // Invalid
                 obj.categoryList = _unitOfWork.Category.GetAll().Select(i => new SelectListItem
                 {
                     Text = i.Name,
