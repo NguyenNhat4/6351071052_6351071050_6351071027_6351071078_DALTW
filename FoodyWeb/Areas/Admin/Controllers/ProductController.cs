@@ -6,6 +6,7 @@ using Foody.DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Foody.Models.ViewModels;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using NuGet.Protocol.Plugins;
 
 namespace FoodyWeb.Areas.Admin.Controllers
 {
@@ -73,16 +74,22 @@ namespace FoodyWeb.Areas.Admin.Controllers
                 { 
 
                 string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                string production = Path.Combine(wwRootPath , @"\images\product");
-                    using (var fileStream = new FileStream(Path.Combine(production, fileName), FileMode.Create))
+                string production = Path.Combine(wwRootPath , "images", "product");
+                    if (Directory.Exists(production))
                     {
-                        file.CopyTo(fileStream);
-                    } 
-                    obj.product.imageUrl = @"\images\product\" + fileName;
+                        using (var fileStream = new FileStream(Path.Combine(production, fileName), FileMode.Create))
+                        {
+                            file.CopyTo(fileStream);
+                        }
+                        obj.product.imageUrl = @"\images\product\" + fileName;
+
+                    }
+                   
+                   
                 } 
 
                 if (obj.product.Id == 0)
-                {
+                {   
                     _unitOfWork.Product.Add(obj.product);
                     _unitOfWork.Save();
                     TempData["success"] = "Product has been created successfully";
