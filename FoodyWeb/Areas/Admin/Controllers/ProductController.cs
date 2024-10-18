@@ -56,6 +56,8 @@ namespace FoodyWeb.Areas.Admin.Controllers
             {
                 // update
                 productVM.product = _unitOfWork.Product.Get(u => u.Id == id);
+                
+
                 return View(productVM);
             }
 
@@ -65,16 +67,27 @@ namespace FoodyWeb.Areas.Admin.Controllers
 
 
         [HttpPost]
-        public IActionResult Upsert(ProductVM obj, IFormFile? file)  
+        public IActionResult Upsert(ProductVM obj, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
                 string wwRootPath = _webhostEnvironment.WebRootPath;
-                if (file != null) 
-                { 
+                if (file != null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string production = Path.Combine(wwRootPath, "images", "product");
 
-                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                string production = Path.Combine(wwRootPath , "images", "product");
+                    // Delete existing image file
+                    if (!string.IsNullOrEmpty(obj.product.imageUrl))
+                    {
+                        string existingImagePath = Path.Combine(wwRootPath, obj.product.imageUrl.TrimStart('\\'));
+                        if (System.IO.File.Exists(existingImagePath))
+                        {
+                            System.IO.File.Delete(existingImagePath);
+                        }
+                    }
+
+                    // Save new image file
                     if (Directory.Exists(production))
                     {
                         using (var fileStream = new FileStream(Path.Combine(production, fileName), FileMode.Create))
@@ -82,14 +95,11 @@ namespace FoodyWeb.Areas.Admin.Controllers
                             file.CopyTo(fileStream);
                         }
                         obj.product.imageUrl = @"\images\product\" + fileName;
-
                     }
-                   
-                   
-                } 
+                }
 
                 if (obj.product.Id == 0)
-                {   
+                {
                     _unitOfWork.Product.Add(obj.product);
                     _unitOfWork.Save();
                     TempData["success"] = "Product has been created successfully";
@@ -100,25 +110,19 @@ namespace FoodyWeb.Areas.Admin.Controllers
                     _unitOfWork.Save();
                     TempData["success"] = "Product has been updated successfully";
                 }
-                
-
 
                 return RedirectToAction("Index");
             }
             else
             {
-
                 obj.categoryList = _unitOfWork.Category.GetAll().Select(i => new SelectListItem
                 {
                     Text = i.Name,
                     Value = i.Id.ToString()
                 });
 
-
                 return View(obj);
             }
-
-
         }
 
       
