@@ -1,4 +1,4 @@
-﻿using Foody.Models;
+using Foody.Models;
 using Microsoft.AspNetCore.Mvc;
 
 using Foody.DataAccess.Data;
