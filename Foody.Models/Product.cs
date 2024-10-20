@@ -42,7 +42,9 @@ namespace Foody.Models
         [ForeignKey(nameof(Category))]
         [Required]
         public int CategoryId { get; set; }
-        [Url]
+        [ForeignKey("CategoryId")]
+        [ValidateNever]
+        public Category Category { get; set; }
         [ValidateNever]
         public string? imageUrl { get; set; }
 
