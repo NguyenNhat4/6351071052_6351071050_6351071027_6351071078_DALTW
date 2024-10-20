@@ -21,7 +21,18 @@ namespace Foody.DataAccess.Repository
 
         public void Update(Product obj)
         {
-           _db.Products.Update(obj);
+           var objFromDb = _db.Products.FirstOrDefault(s => s.Id == obj.Id);
+            if (objFromDb != null)
+            {
+                if (obj.imageUrl != null)
+                {
+                    objFromDb.imageUrl = obj.imageUrl;
+                }
+                objFromDb.Name = obj.Name;
+                objFromDb.Price = obj.Price;
+                objFromDb.CategoryId = obj.CategoryId;
+                objFromDb.Description = obj.Description;
+            }
         }
     }
 }
