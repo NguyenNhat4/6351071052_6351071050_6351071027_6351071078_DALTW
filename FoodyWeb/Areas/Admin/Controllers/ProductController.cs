@@ -140,7 +140,7 @@ namespace FoodyWeb.Areas.Admin.Controllers
 
 
 
- 
+        [HttpDelete]
         public IActionResult Delete(int? id)
         {
             string wwRootPath = _webhostEnvironment.WebRootPath;
