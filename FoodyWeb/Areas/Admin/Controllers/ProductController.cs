@@ -128,37 +128,6 @@ namespace FoodyWeb.Areas.Admin.Controllers
 
       
 
-        public IActionResult Delete(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-            Product ProductFromDb = _unitOfWork.Product.Get(u => u.Id == id);
-            if (ProductFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(ProductFromDb);
-        }
-
-
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeletePOST(int? id)
-        {
-            Product? obj = _unitOfWork.Product.Get(u => u.Id == id);
-            if (obj == null)
-            {
-                return NotFound();
-            }
-
-            _unitOfWork.Product.Remove(obj);
-            _unitOfWork.Save();
-            TempData["success"] = "Product has been deleted successfully";
-            return RedirectToAction("Index");
-
-
-        }
 
         #region API CALLS
 
@@ -170,35 +139,48 @@ namespace FoodyWeb.Areas.Admin.Controllers
         }
 
 
-        //[HttpDelete]
-        //public IActionResult Delete(int? id)
-        //{
-        //    var productToBeDeleted = _unitOfWork.Product.Get(u => u.Id == id);
-        //    if (productToBeDeleted == null)
-        //    {
-        //        return Json(new { success = false, message = "Error while deleting" });
-        //    }
 
-        //    string productPath = @"images\products\product-" + id;
-        //    string finalPath = Path.Combine(_webHostEnvironment.WebRootPath, productPath);
+ 
+        public IActionResult Delete(int? id)
+        {
+            string wwRootPath = _webhostEnvironment.WebRootPath;
+            var productToBeDeleted = _unitOfWork.Product.Get(u => u.Id == id);
+            if (productToBeDeleted == null)
+            {
+                return Json(new { success = false, message = "Error while deleting" });
+            }
 
-        //    if (Directory.Exists(finalPath))
-        //    {
-        //        string[] filePaths = Directory.GetFiles(finalPath);
-        //        foreach (string filePath in filePaths)
-        //        {
-        //            System.IO.File.Delete(filePath);
-        //        }
+            // Delete existing image file
+            if (!string.IsNullOrEmpty(productToBeDeleted.imageUrl))
+            {
 
-        //        Directory.Delete(finalPath);
-        //    }
+                string existingImagePath = Path.Combine(wwRootPath, productToBeDeleted.imageUrl.TrimStart('\\'));
+                if (System.IO.File.Exists(existingImagePath))
+                {
+                    System.IO.File.Delete(existingImagePath);
+                }
+            }
+
+            //string productPath = @"images\products\product-" + id;
+            //string finalPath = Path.Combine(_webhostEnvironment.WebRootPath, productPath);
+
+            //if (Directory.Exists(finalPath))
+            //{
+            //    string[] filePaths = Directory.GetFiles(finalPath);
+            //    foreach (string filePath in filePaths)
+            //    {
+            //        System.IO.File.Delete(filePath);
+            //    }
+
+            //    Directory.Delete(finalPath);
+            //}
 
 
-        //    _unitOfWork.Product.Remove(productToBeDeleted);
-        //    _unitOfWork.Save();
+            _unitOfWork.Product.Remove(productToBeDeleted);
+            _unitOfWork.Save();
 
-        //    return Json(new { success = true, message = "Delete Successful" });
-        //}
+            return Json(new { success = true, message = "Delete Successful" });
+        }
 
         #endregion
 
