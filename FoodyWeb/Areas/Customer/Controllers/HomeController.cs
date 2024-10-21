@@ -1,3 +1,4 @@
+using Foody.DataAccess.Repository.IRepository;
 using Foody.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -8,15 +9,17 @@ namespace FoodyWeb.Areas.Customer.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IUnitOfWork _unitOfWork;
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
         {
-            return View();
+            IEnumerable<Product> menuItemList = _unitOfWork.Product.GetAll(includeProperties:"Category");
+            return View(menuItemList);
         }
 
         public IActionResult Privacy()
