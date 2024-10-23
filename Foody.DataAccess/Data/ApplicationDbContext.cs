@@ -2,6 +2,7 @@
 using Foody.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using BulkyBook.Models;
 namespace Foody.DataAccess.Data
 {
 
@@ -14,7 +15,7 @@ namespace Foody.DataAccess.Data
         }
 
         public DbSet<Category> Categories { get; set; }
-
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Product> Products { get; set; }
 
 
