@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-namespace BulkyBook.Models
+namespace Foody.Models
 {
     public class ApplicationUser : IdentityUser
     {

@@ -2,7 +2,7 @@
 using Foody.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using BulkyBook.Models;
+using Foody .Models;
 namespace Foody.DataAccess.Data
 {
 

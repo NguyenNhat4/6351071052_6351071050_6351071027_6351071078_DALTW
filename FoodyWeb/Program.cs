@@ -5,7 +5,7 @@ using Foody.DataAccess.Repository.IRepository;
 using Foody.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using BulkyBook.Utility;
+using Foody.utility;
 using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
