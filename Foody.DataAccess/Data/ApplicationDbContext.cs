@@ -17,9 +17,9 @@ namespace Foody.DataAccess.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Company> Companys { get; set; }
 
-
-
+            
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -27,6 +27,18 @@ namespace Foody.DataAccess.Data
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "Drinks", DisplayOrder = 1 },
                 new Category { Id = 2, Name = "Foods", DisplayOrder = 2 }
+                );
+            modelBuilder.Entity<Company>().HasData(
+                new Company
+                {
+                    Id = 1,
+                    Name = "Hai Phung",
+                    StreetAddress = "123 Tech St",
+                    City = "Tech City",
+                    PostalCode = "12121",
+                    PhoneNumber = "6669990000"
+                }
+               
                 );
 
 
