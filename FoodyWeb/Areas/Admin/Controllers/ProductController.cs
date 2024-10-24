@@ -8,10 +8,13 @@ using Foody.Models.ViewModels;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using NuGet.Protocol.Plugins;
 using Microsoft.AspNetCore.Hosting;
+using Foody.utility;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FoodyWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
     public class ProductController : Controller
     {
         public readonly IUnitOfWork _unitOfWork;

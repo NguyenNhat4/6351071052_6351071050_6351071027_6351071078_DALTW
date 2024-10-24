@@ -3,10 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 
 using Foody.DataAccess.Data;
 using Foody.DataAccess.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
+using Foody.utility;
 
 namespace FoodyWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles =SD.Role_Admin)]
     public class CategoryController : Controller
     {
         public readonly IUnitOfWork _unitOfWork;
