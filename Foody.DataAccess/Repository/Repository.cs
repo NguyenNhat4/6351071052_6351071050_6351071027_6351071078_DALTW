@@ -29,7 +29,7 @@ namespace Foody.DataAccess.Repository
             dbSet.Add(entity);  
         }
   
-
+        
         public void Remove(T entity)
         {
             dbSet.Remove(entity);
@@ -68,10 +68,6 @@ namespace Foody.DataAccess.Repository
             dbSet.RemoveRange(filter);  
         }
 
-        public void Update(T entity)
-        {
-            throw new NotImplementedException();
-        }
-
+     
     }
 }

@@ -20,10 +20,7 @@ namespace Foody.DataAccess.Repository
             _db = db;
         }
     
-        public void Remove(Category obj)
-        {
-            base.Remove(obj);
-        }
+    
 
         public void Update(Category obj)
         {            _db.Categories.Update(obj);

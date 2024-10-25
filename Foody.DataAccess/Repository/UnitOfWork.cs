@@ -10,6 +10,7 @@ namespace Foody.DataAccess.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
+        public ICompanyRepository Company { get; private set; }
         public ICategoryRepository Category { get; private set; }
 
         public IProductRepository Product { get; private set; }
