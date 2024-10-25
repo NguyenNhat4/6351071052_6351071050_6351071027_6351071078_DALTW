@@ -112,7 +112,6 @@ namespace FoodyWeb.Areas.Identity.Pages.Account
             public string Name { get; set; }
             public string? StreetAddress { get; set; }
             public string? City { get; set; }
-            public string? State { get; set; }
             public string? PostalCode { get; set; }
             public string? PhoneNumber { get; set; }
         }
@@ -154,7 +153,6 @@ namespace FoodyWeb.Areas.Identity.Pages.Account
                 user.StreetAddress = Input.StreetAddress;
                 user.City = Input.City;
                 user.Name = Input.Name;
-                user.State = Input.State;
                 user.PostalCode = Input.PostalCode;
                 user.PhoneNumber = Input.PhoneNumber;
                 var result = await _userManager.CreateAsync(user, Input.Password);
