@@ -36,12 +36,7 @@ namespace Foody.DataAccess.Migrations
                 type: "nvarchar(max)",
                 nullable: true);
 
-            migrationBuilder.AddColumn<string>(
-                name: "State",
-                table: "AspNetUsers",
-                type: "nvarchar(max)",
-                nullable: true);
-
+         
             migrationBuilder.AddColumn<string>(
                 name: "StreetAddress",
                 table: "AspNetUsers",
@@ -66,10 +61,6 @@ namespace Foody.DataAccess.Migrations
 
             migrationBuilder.DropColumn(
                 name: "PostalCode",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
-                name: "State",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
