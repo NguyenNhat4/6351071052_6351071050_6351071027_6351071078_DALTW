@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Data;
 namespace FoodyWeb.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CompanyController : Controller
     {
         public readonly IUnitOfWork _unitOfWork;
@@ -87,5 +88,5 @@ namespace FoodyWeb.Areas.Admin.Controllers
         #endregion
     }
 }
-    }
-}
+    
+
