@@ -21,6 +21,7 @@ namespace Foody.DataAccess.Repository
         {
 
             _db = db;
+            Company = new CompanyRepository(db);
             Category = new CategoryRepository(db);
             Product = new ProductRepository(db);
         }
