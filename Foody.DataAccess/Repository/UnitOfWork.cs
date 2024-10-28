@@ -14,6 +14,7 @@ namespace Foody.DataAccess.Repository
         public ICategoryRepository Category { get; private set; }
 
         public IProductRepository Product { get; private set; }
+        public IShoppingCartRepository ShoppingCart { get; private set; }
 
         private ApplicationDbContext _db;
 
@@ -24,6 +25,7 @@ namespace Foody.DataAccess.Repository
             Company = new CompanyRepository(db);
             Category = new CategoryRepository(db);
             Product = new ProductRepository(db);
+            ShoppingCart = new ShoppingCartRepository(db);
         }
 
         public void Save()
