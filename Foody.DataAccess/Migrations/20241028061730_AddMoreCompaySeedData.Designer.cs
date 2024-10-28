@@ -78,9 +78,7 @@ namespace Foody.DataAccess.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PostalCode")
-                        .HasColumnType("nvarchar(max)");
-
+                   
                     b.Property<string>("StreetAddress")
                         .HasColumnType("nvarchar(max)");
 
@@ -95,7 +93,6 @@ namespace Foody.DataAccess.Migrations
                             City = "Tech City",
                             Name = "Tech Solution",
                             PhoneNumber = "6669990000",
-                            PostalCode = "12121",
                             StreetAddress = "123 Tech St"
                         },
                         new
@@ -104,7 +101,6 @@ namespace Foody.DataAccess.Migrations
                             City = "Vid City",
                             Name = "Vivid Books",
                             PhoneNumber = "7779990000",
-                            PostalCode = "66666",
                             StreetAddress = "999 Vid St"
                         },
                         new
@@ -113,7 +109,6 @@ namespace Foody.DataAccess.Migrations
                             City = "Lala land",
                             Name = "Readers Club",
                             PhoneNumber = "1113335555",
-                            PostalCode = "99999",
                             StreetAddress = "999 Main St"
                         });
                 });
@@ -405,9 +400,7 @@ namespace Foody.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PostalCode")
-                        .HasColumnType("nvarchar(max)");
-
+                   
                     b.Property<string>("StreetAddress")
                         .HasColumnType("nvarchar(max)");
 

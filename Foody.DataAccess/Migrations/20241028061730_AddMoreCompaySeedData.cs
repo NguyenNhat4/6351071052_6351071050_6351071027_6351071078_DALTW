@@ -27,7 +27,7 @@ namespace Foody.DataAccess.Migrations
 
             migrationBuilder.InsertData(
                 table: "Companys",
-                columns: new[] { "Id", "City", "Name", "PhoneNumber", "PostalCode", "StreetAddress" },
+                columns: new[] { "Id", "City", "Name", "PhoneNumber",  "StreetAddress" },
                 values: new object[,]
                 {
                     { 2, "Vid City", "Vivid Books", "7779990000", "66666", "999 Vid St" },

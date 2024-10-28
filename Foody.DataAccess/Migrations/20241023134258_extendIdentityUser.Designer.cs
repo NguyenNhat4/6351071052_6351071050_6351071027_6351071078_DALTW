@@ -347,9 +347,6 @@ namespace Foody.DataAccess.Migrations
                     b.Property<int>("Name")
                         .HasColumnType("int");
 
-                    b.Property<string>("PostalCode")
-                        .HasColumnType("nvarchar(max)");
-
                   
                     b.Property<string>("StreetAddress")
                         .HasColumnType("nvarchar(max)");

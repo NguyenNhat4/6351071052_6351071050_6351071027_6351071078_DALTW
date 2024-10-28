@@ -33,7 +33,6 @@ namespace Foody.DataAccess.Data
                     Name = "Tech Solution",
                     StreetAddress = "123 Tech St",
                     City = "Tech City",
-                    PostalCode = "12121",
                     PhoneNumber = "6669990000"
                 },
                 new Company
@@ -42,7 +41,6 @@ namespace Foody.DataAccess.Data
                     Name = "Vivid Books",
                     StreetAddress = "999 Vid St",
                     City = "Vid City",
-                    PostalCode = "66666",
                     PhoneNumber = "7779990000"
                 },
                 new Company
@@ -51,7 +49,6 @@ namespace Foody.DataAccess.Data
                     Name = "Readers Club",
                     StreetAddress = "999 Main St",
                     City = "Lala land",
-                    PostalCode = "99999",
                     PhoneNumber      = "1113335555"
                 }
                 );

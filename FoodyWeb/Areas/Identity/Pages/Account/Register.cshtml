@@ -54,11 +54,7 @@
                         <span asp-validation-for="Input.City" class="text-danger"></span>
                     </div>
               
-                    <div class="form-floating mb-3 col-md-6">
-                        <input asp-for="Input.PostalCode" class="form-control" placeholder="name@example.com" />
-                        <label asp-for="Input.PostalCode" class="ms-2 text-muted">Postal Code</label>
-                        <span asp-validation-for="Input.PostalCode" class="text-danger"></span>
-                    </div>
+                
 
                     <div class="form-floating mb-3 col-md-12">
                         <select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select">
