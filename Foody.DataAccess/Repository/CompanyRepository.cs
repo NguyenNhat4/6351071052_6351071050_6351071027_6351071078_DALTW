@@ -12,7 +12,7 @@ namespace Foody.DataAccess.Repository
 {
     public class CompanyRepository : Repository<Company>, ICompanyRepository
     {
-        ApplicationDbContext _db;
+        private ApplicationDbContext _db;
         public CompanyRepository(ApplicationDbContext db): base(db)
         {
             _db = db;

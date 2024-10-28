@@ -10,7 +10,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
-
+using Foody.DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -23,6 +23,7 @@ using Foody.Models;
 using Foody.utility;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Foody.DataAccess.Repository.IRepository;
 namespace FoodyWeb.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
@@ -34,6 +35,7 @@ namespace FoodyWeb.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IUnitOfWork _unitOfWork;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -41,8 +43,11 @@ namespace FoodyWeb.Areas.Identity.Pages.Account
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IUnitOfWork unitOfWork
+            )
         {
+            _unitOfWork = unitOfWork;
             _userManager = userManager;
             _roleManager = roleManager;
             _userStore = userStore;
@@ -114,6 +119,9 @@ namespace FoodyWeb.Areas.Identity.Pages.Account
             public string? City { get; set; }
             public string? PostalCode { get; set; }
             public string? PhoneNumber { get; set; }
+            public int? CompanyId { get; set; }
+            [ValidateNever]
+            IEnumerable<SelectListItem> Companylist { get; set; }
         }
 
 
@@ -127,12 +135,24 @@ namespace FoodyWeb.Areas.Identity.Pages.Account
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_Company)).GetAwaiter().GetResult();
             }
 
-            Input = new() {
-                RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem {
+            Input = new()
+            {
+                RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
+                {
                     Text = i,
                     Value = i
                 })
+                //Companylist = null
+
+                //_unitOfWork.Company.   .GetAll().Select(i => new SelectListItem
+                //{
+                //    Text = i.Name,
+                //    Value = i.Id.ToString()
+                //})
             };
+
+
+
 
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
