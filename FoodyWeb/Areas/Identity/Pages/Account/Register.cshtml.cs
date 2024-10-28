@@ -171,8 +171,12 @@ namespace FoodyWeb.Areas.Identity.Pages.Account
                 user.City = Input.City;
                 user.Name = Input.Name;
                 user.PhoneNumber = Input.PhoneNumber;
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                if (Input.Role == SD.Role_Company)
+                {
+                    user.CompanyId = Input.CompanyId;
+                }
 
+                var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
