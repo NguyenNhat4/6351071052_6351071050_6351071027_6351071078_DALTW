@@ -121,7 +121,7 @@ namespace FoodyWeb.Areas.Identity.Pages.Account
             public string? PhoneNumber { get; set; }
             public int? CompanyId { get; set; }
             [ValidateNever]
-            IEnumerable<SelectListItem> Companylist { get; set; }
+              public IEnumerable<SelectListItem> Companylist { get; set; }
         }
 
 
@@ -141,14 +141,12 @@ namespace FoodyWeb.Areas.Identity.Pages.Account
                 {
                     Text = i,
                     Value = i
+                }),
+                 Companylist =  _unitOfWork.Company.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
                 })
-                //Companylist = null
-
-                //_unitOfWork.Company.   .GetAll().Select(i => new SelectListItem
-                //{
-                //    Text = i.Name,
-                //    Value = i.Id.ToString()
-                //})
             };
 
 
