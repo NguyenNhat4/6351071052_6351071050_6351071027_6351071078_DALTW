@@ -1,5 +1,6 @@
 ﻿using Foody.DataAccess.Data;
 using Foody.DataAccess.Repository.IRepository;
+using Foody.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,12 +17,14 @@ namespace Foody.DataAccess.Repository
         public IProductRepository Product { get; private set; }
         public IShoppingCartRepository ShoppingCart { get; private set; }
 
+        public IApplicationUserRepository ApplicationUser { get; private set; }
         private ApplicationDbContext _db;
 
         public UnitOfWork(ApplicationDbContext db) 
         {
 
             _db = db;
+            ApplicationUser = new ApplicationUserRepository(db);    
             Company = new CompanyRepository(db);
             Category = new CategoryRepository(db);
             Product = new ProductRepository(db);
