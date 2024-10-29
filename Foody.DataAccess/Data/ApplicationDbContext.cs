@@ -68,9 +68,7 @@ namespace Foody.DataAccess.Data
                     Description = "",
                     ListPrice = 99,
                     Price = 90,
-                    Price50 = 85,
-                    Price100 = 80,
-                    CategoryId = 1,
+                                   CategoryId = 1,
                     imageUrl = ""
                 },
                 new Product
@@ -80,8 +78,7 @@ namespace Foody.DataAccess.Data
                     Description = "",
                     ListPrice = 99,
                     Price = 90,
-                    Price50 = 85,
-                    Price100 = 80,
+                   
                     CategoryId = 1,
                     imageUrl = ""
                 }

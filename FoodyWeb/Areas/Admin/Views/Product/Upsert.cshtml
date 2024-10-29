@@ -39,18 +39,7 @@
                             <span asp-validation-for="product.Price" class="text-danger"></span>
                         </div>
 
-                        <div class="form-floating py-2 col-12">
-                            <input asp-for="product.Price50" class="form-control border-0 shadow" />
-                            <label asp-for="product.Price50" class="ms-2"></label>
-                            <span asp-validation-for="product.Price50" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-floating py-2 col-12">
-                            <input asp-for="product.Price100" class="form-control border-0 shadow" />
-                            <label asp-for="product.Price100" class="ms-2"></label>
-                            <span asp-validation-for="product.Price100" class="text-danger"></span>
-                        </div>
-
+                      
                         <div class="form-floating py-2 col-12">
                             <select asp-for="@Model.product.CategoryId" asp-items="@Model.categoryList" class="form-select border-0 shadow">
                                 <option disabled selected>--Select Category--</option>
