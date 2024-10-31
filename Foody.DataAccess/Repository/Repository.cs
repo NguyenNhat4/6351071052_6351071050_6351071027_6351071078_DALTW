@@ -1,4 +1,5 @@
-﻿using Foody.DataAccess.Data;
+﻿
+using Foody.DataAccess.Data;
 using Foody.DataAccess.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -49,18 +50,34 @@ namespace Foody.DataAccess.Repository
 
         }
 
-        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null)
+        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)
         {
-            IQueryable<T> query = dbSet;
-            query = query.Where(filter);
-            if (!string.IsNullOrEmpty(includeProperties))
+            if (tracked)
             {
-                foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+
+                IQueryable<T> query = dbSet;
+                query = query.Where(filter);
+                if (!string.IsNullOrEmpty(includeProperties))
                 {
-                    query = query.Include(includeProperty);
+                    foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        query = query.Include(includeProperty);
+                    }
                 }
+                return query.FirstOrDefault();
+            } else
+            {
+                IQueryable<T> query = dbSet.AsNoTracking();
+                query = query.Where(filter);
+                if (!string.IsNullOrEmpty(includeProperties))
+                {
+                    foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        query = query.Include(includeProperty);
+                    }
+                }
+                return query.FirstOrDefault();
             }
-            return query.FirstOrDefault();  
         }
 
         public void RemoveRange(IEnumerable<T> filter)

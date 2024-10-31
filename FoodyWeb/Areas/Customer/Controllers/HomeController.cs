@@ -1,7 +1,9 @@
 using Foody.DataAccess.Repository.IRepository;
 using Foody.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace FoodyWeb.Areas.Customer.Controllers
 {
@@ -21,11 +23,37 @@ namespace FoodyWeb.Areas.Customer.Controllers
             IEnumerable<Product> menuItemList = _unitOfWork.Product.GetAll(includeProperties:"Category");
             return View(menuItemList);
         }
-
         public IActionResult Details(int productId)
         {
-            Product product = _unitOfWork.Product.Get( u=>u.Id==productId ,includeProperties: "Category");
-            return View(product);
+          
+            ShoppingCart cartObj = new ShoppingCart()
+            {
+                Product = _unitOfWork.Product.Get(c => c.Id == productId, includeProperties: "Category"),
+                ProductId = productId
+            };
+            return View(cartObj);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Details(ShoppingCart shoppingCart)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userID = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            shoppingCart.ApplicationUserId = userID;
+
+            ShoppingCart cartFromDb = _unitOfWork.ShoppingCart.Get(u => u.ApplicationUserId == shoppingCart.ApplicationUserId && u.ProductId == shoppingCart.ProductId);
+            if(cartFromDb == null)
+            {
+                _unitOfWork.ShoppingCart.Add(shoppingCart);
+            }
+            else
+            {
+                cartFromDb.Count += shoppingCart.Count;
+                _unitOfWork.ShoppingCart.Update(cartFromDb);
+            }
+
+            return View();
         }
         public IActionResult Privacy()
         {
