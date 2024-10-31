@@ -53,6 +53,7 @@ namespace FoodyWeb.Areas.Customer.Controllers
                 _unitOfWork.ShoppingCart.Update(cartFromDb);
             }
 
+            TempData["success"] = "Item has been added to cart";
             return View();
         }
         public IActionResult Privacy()
