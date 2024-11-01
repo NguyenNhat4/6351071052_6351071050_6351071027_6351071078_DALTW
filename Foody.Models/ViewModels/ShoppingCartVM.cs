@@ -9,7 +9,7 @@ namespace Foody.Models.ViewModels
     public class ShoppingCartVM
     {
 
-        public IEnumerable<ShoppingCart> ShippingCartList { get; set; }
+        public IEnumerable<ShoppingCart> ShoppingCartList { get; set; }
         public double OrderTotal { get; set; }
     }
 }
