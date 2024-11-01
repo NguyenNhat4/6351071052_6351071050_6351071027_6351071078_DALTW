@@ -1,4 +1,5 @@
 ﻿using Foody.DataAccess.Repository.IRepository;
+using Foody.Models;
 using Foody.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,7 @@ namespace FoodyWeb.Areas.Customer.Controllers
         {
             _unitOfWork = unitOfWork;
         }
+        
         [Authorize]
         public IActionResult Index()
         {
@@ -24,12 +26,13 @@ namespace FoodyWeb.Areas.Customer.Controllers
             ShoppingCartVM = new ShoppingCartVM()
             {
                 ShippingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userID, includeProperties: "Product")
-            };
+            }; 
 
             foreach(var cart in ShoppingCartVM.ShippingCartList)
             {
-                ShoppingCartVM.OrderTotal += (cart.Product.Price * cart.Count);
-            }
+                cart.price = cart.Product.Price;
+                ShoppingCartVM.OrderTotal += (cart.price * cart.Count);
+            }       
 
             return View(ShoppingCartVM);
         }
