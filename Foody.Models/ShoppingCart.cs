@@ -1,4 +1,4 @@
-﻿    using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+    using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,9 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Foody.Models
-{
+{   
     public class ShoppingCart
     {
+        [Key]
         public int Id { get; set; }
         public int ProductId { get; set; }
         [ForeignKey("ProductId")]

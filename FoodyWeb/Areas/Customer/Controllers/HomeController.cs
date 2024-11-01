@@ -38,24 +38,27 @@ namespace FoodyWeb.Areas.Customer.Controllers
         [Authorize]
         public IActionResult Details(ShoppingCart shoppingCart)
         {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var userID = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
-            shoppingCart.ApplicationUserId = userID;
-
-            ShoppingCart cartFromDb = _unitOfWork.ShoppingCart.Get(u => u.ApplicationUserId == shoppingCart.ApplicationUserId && u.ProductId == shoppingCart.ProductId);
-            if(cartFromDb == null)
-            {
-                _unitOfWork.ShoppingCart.Add(shoppingCart);
-            }
-            else
-            {
-                cartFromDb.Count += shoppingCart.Count;
-                _unitOfWork.ShoppingCart.Update(cartFromDb);
-            }
-
-            TempData["success"] = "Item has been added to cart";
-            return View();
+           
+        var claimsIdentity = (ClaimsIdentity)User.Identity;
+        var userID = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+        shoppingCart.ApplicationUserId = userID;
+         
+        ShoppingCart cartFromDb = _unitOfWork.ShoppingCart.Get(u => u.ApplicationUserId == shoppingCart.ApplicationUserId && u.ProductId == shoppingCart.ProductId);
+        if (cartFromDb == null)
+        {
+            _unitOfWork.ShoppingCart.Add(shoppingCart);
         }
+        else
+        {
+            cartFromDb.Count += shoppingCart.Count;
+            _unitOfWork.ShoppingCart.Update(cartFromDb);
+        }
+            _unitOfWork.Save();
+            TempData["success"] = "Item has been added to cart";
+            return RedirectToAction("Index");   
+        }
+
+
         public IActionResult Privacy()
         {
             return View();

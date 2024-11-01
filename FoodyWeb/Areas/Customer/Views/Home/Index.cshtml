@@ -27,7 +27,13 @@
                                 <p class="text-dark text-opacity-75 text-center mb-0">
                                     List Price:
                                     <span class="text-decoration-line-through">
-                                        @product.ListPrice.ToString("C")
+                                        @product.ListPrice.ToString("C", new System.Globalization.CultureInfo("vi-VN"));
+                                    </span>
+                                </p>
+                                <p class="text-dark text-opacity-75 text-center mb-0">
+                                    Price:
+                                    <span >
+                                        @product.Price.ToString("C", new System.Globalization.CultureInfo("vi-VN"));
                                     </span>
                                 </p>
                             </div>
