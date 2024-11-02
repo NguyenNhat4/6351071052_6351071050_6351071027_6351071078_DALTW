@@ -67,6 +67,8 @@ namespace FoodyWeb.Areas.Customer.Controllers
             _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
-
+        public IActionResult Summary() { 
+        return View();
+        }
     }
 }
