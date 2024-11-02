@@ -14,5 +14,19 @@ namespace Foody.utility
         public const string Role_Admin = "Admin";
         public const string Role_Employee = "Employee";
 
+
+        public const string statusPending = "Pending";
+        public const string statusApproved = "Approved";
+        public const string statusProcessing = "Processing";
+        public const string statusShipped = "Shipped";
+        public const string statusDelivered = "Delivered";
+        public const string statusCancelled = "Cancelled";
+        public const string statusRefunded = "Refunded";
+
+        public const string PaymentStatusPending = "Pending";
+        public const string PaymentStatusApproved = "Approved";
+        public const string PaymentStatusDelayed = "Delayed";
+        public const string PaymentStatusRejected = "Rejected";
+
     }
 }
