@@ -19,7 +19,7 @@ namespace FoodyWeb.Areas.Customer.Controllers
         {
             _unitOfWork = unitOfWork;
         }
-        
+
         [Authorize]
         public IActionResult Index()
         {
@@ -30,13 +30,13 @@ namespace FoodyWeb.Areas.Customer.Controllers
             {
                 ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userID, includeProperties: "Product"),
                 OrderHeader = new OrderHeader()
-            }; 
+            };
             ShoppingCartVM.OrderHeader.OrderTotal = 0;
             foreach (var cart in ShoppingCartVM.ShoppingCartList)
             {
                 cart.price = cart.Product.Price;
                 ShoppingCartVM.OrderHeader.OrderTotal += (cart.price * cart.Count);
-            }       
+            }
 
             return View(ShoppingCartVM);
         }
@@ -71,16 +71,17 @@ namespace FoodyWeb.Areas.Customer.Controllers
             _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
-        public IActionResult Summary() {
+        public IActionResult Summary()
+        {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
-             
+
             ShoppingCartVM = new ShoppingCartVM()
             {
                 ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId, includeProperties: "Product"),
                 OrderHeader = new OrderHeader()
             };
-            ShoppingCartVM.OrderHeader.ApplicationUser = _unitOfWork.ApplicationUser.Get(u => u.Id == userId,"" , true);
+            ShoppingCartVM.OrderHeader.ApplicationUser = _unitOfWork.ApplicationUser.Get(u => u.Id == userId, "", true);
             ShoppingCartVM.OrderHeader.Name = ShoppingCartVM.OrderHeader.ApplicationUser.Name;
             ShoppingCartVM.OrderHeader.Phonenumber = ShoppingCartVM.OrderHeader.ApplicationUser.PhoneNumber;
             ShoppingCartVM.OrderHeader.StreetAddress = ShoppingCartVM.OrderHeader.ApplicationUser.StreetAddress;
@@ -95,7 +96,7 @@ namespace FoodyWeb.Areas.Customer.Controllers
         }
         [HttpPost]
         [ActionName("Summary")]
-        public IActionResult SummaryPost() 
+        public IActionResult SummaryPost()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -117,14 +118,12 @@ namespace FoodyWeb.Areas.Customer.Controllers
             {
                 ShoppingCartVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
                 ShoppingCartVM.OrderHeader.OrderStatus = SD.statusPending;
-
-
             }
-            
-            _unitOfWork.OrderHeader.Add(ShoppingCartVM.OrderHeader);
-            _unitOfWork.Save(); 
 
-            foreach(var cart in ShoppingCartVM.ShoppingCartList)
+            _unitOfWork.OrderHeader.Add(ShoppingCartVM.OrderHeader);
+            _unitOfWork.Save();
+
+            foreach (var cart in ShoppingCartVM.ShoppingCartList)
             {
                 OrderDetail orderDetail = new OrderDetail
                 {
@@ -138,10 +137,14 @@ namespace FoodyWeb.Areas.Customer.Controllers
             }
             _unitOfWork.Save();
 
-            return View(ShoppingCartVM);
+            return RedirectToAction(nameof(OrderConfirmation), new { id = ShoppingCartVM.OrderHeader.Id });
 
         }
 
-
+        public IActionResult OrderConfirmation(int id)
+        {
+            return View(id);
+        }
     }
+
 }
