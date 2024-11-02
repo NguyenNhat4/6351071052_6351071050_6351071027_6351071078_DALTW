@@ -28,8 +28,8 @@ namespace FoodyWeb.Areas.Customer.Controllers
                 ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userID, includeProperties: "Product"),
                 OrderHeader = new OrderHeader()
             }; 
-
-            foreach(var cart in ShoppingCartVM.ShoppingCartList)
+            ShoppingCartVM.OrderHeader.OrderTotal = 0;
+            foreach (var cart in ShoppingCartVM.ShoppingCartList)
             {
                 cart.price = cart.Product.Price;
                 ShoppingCartVM.OrderHeader.OrderTotal += (cart.price * cart.Count);
@@ -69,8 +69,28 @@ namespace FoodyWeb.Areas.Customer.Controllers
             return RedirectToAction(nameof(Index));
         }
         public IActionResult Summary() {
-          return View();
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+             
+            ShoppingCartVM = new ShoppingCartVM()
+            {
+                ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId, includeProperties: "Product"),
+                OrderHeader = new OrderHeader()
+            };
 
+            ShoppingCartVM.OrderHeader.ApplicationUser = _unitOfWork.ApplicationUser.Get(u => u.Id == userId);
+
+            ShoppingCartVM.OrderHeader.Name = ShoppingCartVM.OrderHeader.ApplicationUser.Name;
+            ShoppingCartVM.OrderHeader.Phonenumber = ShoppingCartVM.OrderHeader.ApplicationUser.PhoneNumber;
+            ShoppingCartVM.OrderHeader.StreetAddress = ShoppingCartVM.OrderHeader.ApplicationUser.StreetAddress;
+            ShoppingCartVM.OrderHeader.City = ShoppingCartVM.OrderHeader.ApplicationUser.City;
+            ShoppingCartVM.OrderHeader.OrderTotal = 0;
+            foreach (var cart in ShoppingCartVM.ShoppingCartList)
+            {
+                cart.price = cart.Product.Price;
+                ShoppingCartVM.OrderHeader.OrderTotal += (cart.price * cart.Count);
+            }
+            return View(ShoppingCartVM);
         }
     }
 }

@@ -54,26 +54,29 @@ namespace Foody.DataAccess.Repository
 
         }
 
-        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)
+        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked)
         {
-          if(!tracked)
-            {
-                IQueryable<T> query = dbSet.AsNoTracking();
-                if (filter != null)
-                {
-                    query = query.Where(filter);
-                }
-                 if (!string.IsNullOrEmpty(includeProperties))
-                {
-                    foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        query = query.Include(includeProperty);
-                    }
-                }
-                return query.FirstOrDefault();
+
+            IQueryable<T> query;
+            if (tracked) {
+                query = dbSet;
             }
-            return null;
-          
+            else
+            {
+                query = dbSet.AsNoTracking();
+            }
+            query = query.Where(filter);
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var includeProp in includeProperties
+                    .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
+            return query.FirstOrDefault();
+
+
         }
 
         public void RemoveRange(IEnumerable<T> filter)
