@@ -25,13 +25,14 @@ namespace FoodyWeb.Areas.Customer.Controllers
 
             ShoppingCartVM = new ShoppingCartVM()
             {
-                ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userID, includeProperties: "Product")
+                ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userID, includeProperties: "Product"),
+                OrderHeader = new OrderHeader()
             }; 
 
             foreach(var cart in ShoppingCartVM.ShoppingCartList)
             {
                 cart.price = cart.Product.Price;
-                ShoppingCartVM.OrderTotal += (cart.price * cart.Count);
+                ShoppingCartVM.OrderHeader.OrderTotal += (cart.price * cart.Count);
             }       
 
             return View(ShoppingCartVM);
