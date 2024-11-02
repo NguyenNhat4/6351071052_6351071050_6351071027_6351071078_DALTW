@@ -25,6 +25,8 @@ namespace Foody.DataAccess.Repository
         {
 
             _db = db;
+            OrderHeader = new OrderHeaderRepository(db);
+            OrderDetail = new OrderDetailRepository(db);
             ApplicationUser = new ApplicationUserRepository(db);
             Company = new CompanyRepository(db);
             Category = new CategoryRepository(db);
