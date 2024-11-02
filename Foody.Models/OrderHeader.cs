@@ -27,7 +27,6 @@ namespace Foody.Models
         public DateTime PaymentDate { get; set; }
         public DateTime PaymentDueDate { get; set; }
         public string? PaymentIntentId { get; set; }
-        public double orderTotal { get; set; }
 
         [Required]
         public string Phonenumber { get; set; }
