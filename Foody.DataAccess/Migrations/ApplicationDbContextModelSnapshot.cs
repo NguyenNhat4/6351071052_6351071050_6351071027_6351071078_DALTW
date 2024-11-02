@@ -204,9 +204,6 @@ namespace Foody.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("orderTotal")
-                        .HasColumnType("float");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");

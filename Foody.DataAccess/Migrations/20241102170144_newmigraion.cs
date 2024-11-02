@@ -5,7 +5,7 @@
 namespace Foody.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class deleteStateAndPc : Migration
+    public partial class newmigraion : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,32 +22,11 @@ namespace Foody.DataAccess.Migrations
                 name: "PhoneNumber",
                 table: "OrderHeaders",
                 newName: "Phonenumber");
-
-            migrationBuilder.RenameColumn(
-                name: "OrderTotal",
-                table: "OrderHeaders",
-                newName: "orderTotal");
-
-            migrationBuilder.AddColumn<double>(
-                name: "OrderTotal",
-                table: "OrderHeaders",
-                type: "float",
-                nullable: false,
-                defaultValue: 0.0);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "OrderTotal",
-                table: "OrderHeaders");
-
-            migrationBuilder.RenameColumn(
-                name: "orderTotal",
-                table: "OrderHeaders",
-                newName: "OrderTotal");
-
             migrationBuilder.RenameColumn(
                 name: "Phonenumber",
                 table: "OrderHeaders",

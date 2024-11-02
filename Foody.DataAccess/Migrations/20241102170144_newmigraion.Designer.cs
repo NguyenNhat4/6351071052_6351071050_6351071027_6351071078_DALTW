@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Foody.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241102083512_deleteStateAndPc")]
-    partial class deleteStateAndPc
+    [Migration("20241102170144_newmigraion")]
+    partial class newmigraion
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -206,9 +206,6 @@ namespace Foody.DataAccess.Migrations
                     b.Property<string>("TrackingNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("orderTotal")
-                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
