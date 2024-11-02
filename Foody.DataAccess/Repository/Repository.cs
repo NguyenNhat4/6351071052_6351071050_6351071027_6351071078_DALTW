@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 namespace Foody.DataAccess.Repository
 {
 
-
     public class Repository<T> : IRepository<T> where T : class
     {
         private readonly ApplicationDbContext _db;
