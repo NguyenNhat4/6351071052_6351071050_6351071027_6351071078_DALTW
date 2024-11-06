@@ -113,7 +113,7 @@ namespace FoodyWeb.Areas.Customer.Controllers
             {
                 //it is a regular customer 
                 orderheader.PaymentStatus = SD.PaymentStatusPending;
-                orderheader.OrderStatus = SD.statusPending;
+                orderheader.OrderStatus = SD.statusProcessing;
                 orderheader.PaymentMethod = SD.PaymentMethodCash;
             }
             _unitOfWork.OrderHeader.Add(orderheader);
@@ -132,12 +132,6 @@ namespace FoodyWeb.Areas.Customer.Controllers
                 _unitOfWork.Save();
             }
             return RedirectToAction(nameof(OrderConfirmation), new { id = orderheader.Id });
-
-        
-        
-        
-        
-        
    }
 
         public IActionResult Summary()

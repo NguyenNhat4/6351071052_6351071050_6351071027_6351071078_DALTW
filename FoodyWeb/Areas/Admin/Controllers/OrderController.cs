@@ -28,12 +28,39 @@ namespace FoodyWeb.Areas.Admin.Controllers
 
 
             [HttpGet]
-            public IActionResult GetAll(string status)
-
+            public IActionResult GetAll(string status , string paymentType)
             {
-                List<OrderHeader> orderHeaders = _unitofwork.OrderHeader.GetAll(includeProperties: "ApplicationUser").ToList();
+                var objOrderHeaders = _unitofwork.OrderHeader.GetAll(includeProperties: "ApplicationUser");
 
-                return Json(new { data = orderHeaders });
+            switch (status)
+            {
+                case "pending":
+                    objOrderHeaders = objOrderHeaders.Where(u => u.PaymentStatus == SD.PaymentStatusDelayed);
+                    break;
+                case "inprocess":
+                    objOrderHeaders = objOrderHeaders.Where(u => u.OrderStatus == SD.statusProcessing);
+                    break;
+                case "completed":
+                    objOrderHeaders = objOrderHeaders.Where(u => u.OrderStatus == SD.statusShipped);
+                    break;
+                case "approved":
+                    objOrderHeaders = objOrderHeaders.Where(u => u.OrderStatus == SD.PaymentStatusApproved);
+                    break;
+                default:
+                    break;
+            }
+            switch (paymentType)
+            {
+                case "Cash":
+                    objOrderHeaders = objOrderHeaders.Where(u => u.PaymentMethod == SD.PaymentMethodCash);
+                    break;
+                case "Card":
+                    objOrderHeaders = objOrderHeaders.Where(u => u.PaymentMethod == SD.PaymentMethodCard);
+                    break;
+            }
+
+
+            return Json(new { data = objOrderHeaders.ToList() });
             }
         }
 }
