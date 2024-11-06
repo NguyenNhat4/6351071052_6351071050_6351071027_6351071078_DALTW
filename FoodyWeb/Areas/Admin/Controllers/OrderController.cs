@@ -28,10 +28,11 @@ namespace FoodyWeb.Areas.Admin.Controllers
 
 
             [HttpGet]
-            public IActionResult GetAll()
+            public IActionResult GetAll(string status)
 
             {
                 List<OrderHeader> orderHeaders = _unitofwork.OrderHeader.GetAll(includeProperties: "ApplicationUser").ToList();
+
                 return Json(new { data = orderHeaders });
             }
         }

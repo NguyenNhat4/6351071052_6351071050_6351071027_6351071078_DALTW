@@ -2,9 +2,11 @@ var dataTable;
 
 
 $(document).ready(function () {
+    alert("ready func being called");
     var url = window.location.search;
     var status = ["allStatus", "inprocess", "completed", "pending", "approved"];
     var paymentType = ["allPayment", "Card", "Cash"];
+
 
     var selectedPaymentType = "allPayment";
     var selectedStatus = "allStatus";
@@ -13,7 +15,7 @@ $(document).ready(function () {
     for (var i = 0; i < status.length; i++) {
         if (url.includes(status[i])) {
             selectedStatus = status[i];
-            break;  // Exit the loop once we find the match
+            break;  
         }
     }
 
@@ -27,12 +29,11 @@ $(document).ready(function () {
     loadDataTable(selectedStatus, selectedPaymentType);
 
 });
-//alert("Enter select status");
 
 
 function loadDataTable(status, payMentType) {
     dataTable = $('#tblData').DataTable({
-        "ajax": { url: '/admin/order/getall?status=' + status + '&payMentType=' +   payMentType },
+        "ajax": { url: '/admin/order/getall?status=' + status + '&payMentType=' + payMentType },
         "columns": [
             { data: 'id', "width": "5%" },
             { data: 'name', "width": "25%" },
@@ -46,7 +47,6 @@ function loadDataTable(status, payMentType) {
                 "render": function (data) {
                     return `<div class="w-75 btn-group" role="group">
                      <a href="/admin/order/details?orderId=${data}" class="btn btn-primary mx-2"> <i class="bi bi-pencil-square"></i></a>               
-                    
                     </div>`
                 },
                 "width": "10%"
