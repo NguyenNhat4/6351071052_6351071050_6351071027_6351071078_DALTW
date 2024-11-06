@@ -2,7 +2,6 @@ var dataTable;
 
 
 $(document).ready(function () {
-    alert("ready func being called");
     var url = window.location.search;
     var status = ["allStatus", "inprocess", "completed", "pending", "approved"];
     var paymentType = ["allPayment", "Card", "Cash"];
@@ -11,7 +10,6 @@ $(document).ready(function () {
     var selectedPaymentType = "allPayment";
     var selectedStatus = "allStatus";
 
-    // Use for loop to stop at the first match
     for (var i = 0; i < status.length; i++) {
         if (url.includes(status[i])) {
             selectedStatus = status[i];
@@ -22,7 +20,7 @@ $(document).ready(function () {
     for (var j = 0; j < paymentType.length; j++) {
         if (url.includes(paymentType[j])) {
             selectedPaymentType = paymentType[j];
-            break;  // Exit the loop once we find the match
+            break;  
         }
     }
 

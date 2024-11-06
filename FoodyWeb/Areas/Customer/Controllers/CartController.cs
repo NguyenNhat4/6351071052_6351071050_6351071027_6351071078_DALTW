@@ -106,9 +106,6 @@ namespace FoodyWeb.Areas.Customer.Controllers
             orderheader.PaymentDueDate = System.DateTime.Now;
 
 
-
-        
-
             if (applicationUser.CompanyId.GetValueOrDefault() == 0)
             {
                 //it is a regular customer 
