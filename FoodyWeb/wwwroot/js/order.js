@@ -3,53 +3,36 @@ var dataTable;
 
 $(document).ready(function () {
     var url = window.location.search;
-    if (url.includes("inprocess")) {
-        loadDataTable("inprocess");
-    }
-    else {
-        if (url.includes("completed")) {
-            loadDataTable("completed");
-        }
-        else {
-            if (url.includes("pending")) {
-                loadDataTable("pending");
-            }
-            else {
-                if (url.includes("approved")) {
-                    loadDataTable("approved");
-                }
-                else {
-                    loadDataTable("allStatus");
-                }
-            }
+    var status = ["allStatus", "inprocess", "completed", "pending", "approved"];
+    var paymentType = ["allPayment", "Card", "Cash"];
+
+    var selectedPaymentType = "allPayment";
+    var selectedStatus = "allStatus";
+
+    // Use for loop to stop at the first match
+    for (var i = 0; i < status.length; i++) {
+        if (url.includes(status[i])) {
+            selectedStatus = status[i];
+            break;  // Exit the loop once we find the match
         }
     }
+
+    for (var j = 0; j < paymentType.length; j++) {
+        if (url.includes(paymentType[j])) {
+            selectedPaymentType = paymentType[j];
+            break;  // Exit the loop once we find the match
+        }
+    }
+
+    loadDataTable(selectedStatus, selectedPaymentType);
 
 });
 //alert("Enter select status");
-//var status = ["allStatus","inprocess", "completed", "pending","approved"]
-//var paymentType = ["allPayment","Card","Cash"];
 
-//var selectedPaymentType = "allPayment";
-//var selectedStatus = "allStatus";
 
-//status.forEach(element => {
-//    if (url.includes(element)) {
-//        selectedStatus = element;
-//        break;
-//    }
-//})
-//paymentType.forEach(element => {
-//    if (url.includes(element)) {
-//        selectedPaymentType = element;
-//        break;
-//    }
-//})
-//loadDataTable(selectedStatus, selectedPaymentType);
-
-function loadDataTable(status) {
+function loadDataTable(status, payMentType) {
     dataTable = $('#tblData').DataTable({
-        "ajax": { url: '/admin/order/getall?status=' + status },
+        "ajax": { url: '/admin/order/getall?status=' + status + '&payMentType=' +   payMentType },
         "columns": [
             { data: 'id', "width": "5%" },
             { data: 'name', "width": "25%" },
