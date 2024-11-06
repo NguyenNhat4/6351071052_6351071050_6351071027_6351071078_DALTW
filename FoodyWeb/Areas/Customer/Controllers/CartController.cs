@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Stripe.Checkout;
 using System.Net;
+using Foody.DataAccess.Migrations;
 namespace FoodyWeb.Areas.Customer.Controllers
 {
     [Area("Customer")]
@@ -132,7 +133,12 @@ namespace FoodyWeb.Areas.Customer.Controllers
             }
             return RedirectToAction(nameof(OrderConfirmation), new { id = orderheader.Id });
 
-        }
+        
+        
+        
+        
+        
+   }
 
         public IActionResult Summary()
         {
@@ -246,34 +252,33 @@ namespace FoodyWeb.Areas.Customer.Controllers
             return RedirectToAction(nameof(OrderConfirmation), new { id = ShoppingCartVM.OrderHeader.Id });
         }
 
+      
         public IActionResult OrderConfirmation(int id)
         {
             OrderHeader orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == id, includeProperties: "ApplicationUser");
-            if (orderHeader.PaymentMethod == SD.PaymentMethodCash)
+
+            if (orderHeader.PaymentStatus != SD.PaymentStatusDelayed && orderHeader.PaymentMethod != SD.PaymentMethodCash)
             {
-                return View(id);
-            }
-            else {
-                if (orderHeader.PaymentStatus != SD.PaymentStatusDelayed)
+                var service = new SessionService();
+                Session session = service.Get(orderHeader.SessionId);
+                if (session.PaymentStatus.ToLower() == "paid")
                 {
-                    var service = new SessionService();
-                    Session session = service.Get(orderHeader.SessionId);
-                    if (session.PaymentStatus.ToLower() == "paid")
-                    {
-                        _unitOfWork.OrderHeader.UpdateStripePaymentID(ShoppingCartVM.OrderHeader.Id, session.Id, session.PaymentIntentId);
-                        _unitOfWork.OrderHeader.UpdateStatus(orderHeader.Id, SD.statusApproved, SD.PaymentStatusApproved);
-                        _unitOfWork.Save();
-                    }
-                    else
-                    {
-                        orderHeader.PaymentStatus = SD.PaymentStatusRejected;
-                    }
+                    _unitOfWork.OrderHeader.UpdateStripePaymentID(ShoppingCartVM.OrderHeader.Id, session.Id, session.PaymentIntentId);
+                    _unitOfWork.OrderHeader.UpdateStatus(orderHeader.Id, SD.statusApproved, SD.PaymentStatusApproved);
+                    _unitOfWork.Save();
                 }
+                else
+                {
+                    orderHeader.PaymentStatus = SD.PaymentStatusRejected;
+                }
+
+            }
+           
                 List<ShoppingCart> shopCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
                 _unitOfWork.ShoppingCart.RemoveRange(shopCartList);
                 _unitOfWork.Save();
                 return View(id);
-            }
+            
         }
     }
 
