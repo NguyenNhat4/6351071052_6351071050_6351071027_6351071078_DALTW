@@ -19,14 +19,33 @@ $(document).ready(function () {
                     loadDataTable("approved");
                 }
                 else {
-                    loadDataTable("all");
+                    loadDataTable("allStatus");
                 }
             }
         }
     }
 
 });
+//alert("Enter select status");
+//var status = ["allStatus","inprocess", "completed", "pending","approved"]
+//var paymentType = ["allPayment","Card","Cash"];
 
+//var selectedPaymentType = "allPayment";
+//var selectedStatus = "allStatus";
+
+//status.forEach(element => {
+//    if (url.includes(element)) {
+//        selectedStatus = element;
+//        break;
+//    }
+//})
+//paymentType.forEach(element => {
+//    if (url.includes(element)) {
+//        selectedPaymentType = element;
+//        break;
+//    }
+//})
+//loadDataTable(selectedStatus, selectedPaymentType);
 
 function loadDataTable(status) {
     dataTable = $('#tblData').DataTable({
@@ -36,7 +55,7 @@ function loadDataTable(status) {
             { data: 'name', "width": "25%" },
             { data: 'applicationUser.phoneNumber', "width": "20%" },
             { data: 'applicationUser.email', "width": "25%" },
-            { data: 'paymentMethod', "width": "10%"},
+            { data: 'paymentMethod', "width": "10%" },
             { data: 'orderStatus', "width": "10%" },
             { data: 'orderTotal', "width": "10%" },
             {
@@ -52,4 +71,4 @@ function loadDataTable(status) {
         ]
     });
 
-   }
+}
