@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Stripe.Checkout;
+using System.Net;
 namespace FoodyWeb.Areas.Customer.Controllers
 {
     [Area("Customer")]
@@ -15,7 +16,8 @@ namespace FoodyWeb.Areas.Customer.Controllers
 
         [BindProperty]
         public ShoppingCartVM ShoppingCartVM { get; set; }
-        public CartController(IUnitOfWork unitOfWork)
+    
+    public CartController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -71,6 +73,67 @@ namespace FoodyWeb.Areas.Customer.Controllers
             _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
+        
+        public IActionResult Cash()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            List<ShoppingCart> ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId, includeProperties: "Product").ToList();
+            OrderHeader orderheader = new OrderHeader();
+            ApplicationUser applicationUser = _unitOfWork.ApplicationUser.Get(u => u.Id == userId);
+
+            orderheader.OrderTotal = 0;
+
+            foreach (var cart in ShoppingCartList)
+            {
+                cart.price = cart.Product.Price;
+                orderheader.OrderTotal += (cart.price * cart.Count);
+            }
+
+            orderheader.ApplicationUserId = userId;
+  
+
+
+            orderheader.Name = applicationUser.Name;
+            orderheader.Phonenumber = applicationUser.PhoneNumber;
+            orderheader.StreetAddress = applicationUser.StreetAddress;
+            orderheader.City = applicationUser.City;
+            orderheader.OrderDate = System.DateTime.Now;
+            orderheader.ShippingDate = System.DateTime.Now;
+            orderheader.PaymentDate = System.DateTime.Now;
+            orderheader.PaymentDueDate = System.DateTime.Now;
+
+
+
+        
+
+            if (applicationUser.CompanyId.GetValueOrDefault() == 0)
+            {
+                //it is a regular customer 
+                orderheader.PaymentStatus = SD.PaymentStatusPending;
+                orderheader.OrderStatus = SD.statusPending;
+                orderheader.PaymentMethod = SD.PaymentMethodCash;
+            }
+            _unitOfWork.OrderHeader.Add(orderheader);
+            _unitOfWork.Save();
+
+            foreach (var cart in ShoppingCartList)
+            {
+                OrderDetail orderDetail = new()
+                {
+                    ProductId = cart.ProductId,
+                    OrderHeaderId = orderheader.Id,
+                    Price = cart.price,
+                    Count = cart.Count
+                };
+                _unitOfWork.OrderDetail.Add(orderDetail);
+                _unitOfWork.Save();
+            }
+            return RedirectToAction(nameof(OrderConfirmation), new { id = orderheader.Id });
+
+        }
+
         public IActionResult Summary()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -92,6 +155,8 @@ namespace FoodyWeb.Areas.Customer.Controllers
                 cart.price = cart.Product.Price;
                 ShoppingCartVM.OrderHeader.OrderTotal += (cart.price * cart.Count);
             }
+
+
             return View(ShoppingCartVM);
         }
         [HttpPost]
@@ -183,7 +248,32 @@ namespace FoodyWeb.Areas.Customer.Controllers
 
         public IActionResult OrderConfirmation(int id)
         {
-            return View(id);
+            OrderHeader orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == id, includeProperties: "ApplicationUser");
+            if (orderHeader.PaymentMethod == SD.PaymentMethodCash)
+            {
+                return View(id);
+            }
+            else {
+                if (orderHeader.PaymentStatus != SD.PaymentStatusDelayed)
+                {
+                    var service = new SessionService();
+                    Session session = service.Get(orderHeader.SessionId);
+                    if (session.PaymentStatus.ToLower() == "paid")
+                    {
+                        _unitOfWork.OrderHeader.UpdateStripePaymentID(ShoppingCartVM.OrderHeader.Id, session.Id, session.PaymentIntentId);
+                        _unitOfWork.OrderHeader.UpdateStatus(orderHeader.Id, SD.statusApproved, SD.PaymentStatusApproved);
+                        _unitOfWork.Save();
+                    }
+                    else
+                    {
+                        orderHeader.PaymentStatus = SD.PaymentStatusRejected;
+                    }
+                }
+                List<ShoppingCart> shopCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
+                _unitOfWork.ShoppingCart.RemoveRange(shopCartList);
+                _unitOfWork.Save();
+                return View(id);
+            }
         }
     }
 

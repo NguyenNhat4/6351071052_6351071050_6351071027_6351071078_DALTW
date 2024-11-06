@@ -13,6 +13,7 @@ namespace Foody.Models
     {
         [Required]
         public string Name { get; set; }
+        
         public string? StreetAddress { get; set; }
         public string? City { get; set; }
         public int? CompanyId { get; set; }

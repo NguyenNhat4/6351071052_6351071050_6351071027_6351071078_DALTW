@@ -9,6 +9,7 @@
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
 	<ItemGroup>
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	  <PackageReference Include="Stripe.net" Version="47.1.0-beta.1" />
 	</ItemGroup>
 </Project>

@@ -28,5 +28,8 @@ namespace Foody.utility
         public const string PaymentStatusDelayed = "Delayed";
         public const string PaymentStatusRejected = "Rejected";
 
+        public const string PaymentMethodCash = "Cash";
+        public const string PaymentMethodCard = "Card";
+
     }
 }
