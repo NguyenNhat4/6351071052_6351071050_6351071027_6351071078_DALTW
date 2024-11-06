@@ -1,5 +1,6 @@
 var dataTable;
 
+
 $(document).ready(function () {
     var url = window.location.search;
     if (url.includes("inprocess")) {
@@ -26,6 +27,7 @@ $(document).ready(function () {
 
 });
 
+
 function loadDataTable(status) {
     dataTable = $('#tblData').DataTable({
         "ajax": { url: '/admin/order/getall?status=' + status },
@@ -49,4 +51,5 @@ function loadDataTable(status) {
             }
         ]
     });
-}
+
+   }
