@@ -78,43 +78,15 @@ namespace FoodyWeb.Areas.Admin.Controllers
             orderHeader.ShippingDate = DateTime.Now;
             if (orderHeader.PaymentStatus == SD.PaymentStatusDelayed)
             {
-                orderHeader.PaymentDueDate = DateTime.Now.AddDays(30).Date;
+                orderHeader.PaymentDueDate = DateTime.Now.AddDays(1).Date;
             }
 
             _unitofwork.OrderHeader.Update(orderHeader);
             _unitofwork.Save();
-            TempData["Success"] = "Order Shipped Successfully.";
+            TempData["Success"] = "Order Served Successfully.";
             return RedirectToAction(nameof(Details), new { orderId = OrderVM.OrderHeader.Id });
         }
-        [HttpPost]
-        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
-        public IActionResult CancelOrder()
-        {
-
-            var orderHeader = _unitofwork.OrderHeader.Get(u => u.Id == OrderVM.OrderHeader.Id);
-
-            if (orderHeader.PaymentStatus == SD.PaymentStatusApproved)
-            {
-                var options = new RefundCreateOptions
-                {
-                    Reason = RefundReasons.RequestedByCustomer,
-                    PaymentIntent = orderHeader.PaymentIntentId
-                };
-
-                var service = new RefundService();
-                Refund refund = service.Create(options);
-
-                _unitofwork.OrderHeader.UpdateStatus(orderHeader.Id, SD.statusCancelled, SD.statusRefunded);
-            }
-            else
-            {
-                _unitofwork.OrderHeader.UpdateStatus(orderHeader.Id, SD.statusCancelled, SD.statusCancelled);
-            }
-            _unitofwork.Save();
-            TempData["Success"] = "Order Cancelled Successfully.";
-            return RedirectToAction(nameof(Details), new { orderId = OrderVM.OrderHeader.Id });
-
-        }
+    
 
 
 
@@ -163,32 +135,28 @@ namespace FoodyWeb.Areas.Admin.Controllers
             Response.Headers.Add("Location", session.Url);
             return new StatusCodeResult(303);
         }
+   
 
-        public IActionResult PaymentConfirmation(int orderHeaderId)
+        public IActionResult PaymentConfirmation()
         {
+            OrderHeader orderHeader = _unitofwork.OrderHeader.Get(u => u.Id == OrderVM.OrderHeader.Id);
+            
+            string paymentStatus = orderHeader.PaymentStatus;
+            bool payCash = (orderHeader.PaymentMethod == SD.PaymentMethodCash);
+            bool isOrderServed = (orderHeader.OrderStatus == SD.statusShipped);
 
-            OrderHeader orderHeader = _unitofwork.OrderHeader.Get(u => u.Id == orderHeaderId);
-            if (orderHeader.PaymentStatus == SD.PaymentStatusDelayed)
-            {
-                //this is an order by company
-
-                var service = new SessionService();
-                Session session = service.Get(orderHeader.SessionId);
-
-                if (session.PaymentStatus.ToLower() == "paid")
-                {
-                    _unitofwork.OrderHeader.UpdateStripePaymentID(orderHeaderId, session.Id, session.PaymentIntentId);
-                    _unitofwork.OrderHeader.UpdateStatus(orderHeaderId, orderHeader.OrderStatus, SD.PaymentStatusApproved);
-                    _unitofwork.Save();
-                }
+            if (!payCash || !isOrderServed) return RedirectToAction(nameof(Details), new { orderId = orderHeader.Id });
 
 
-            }
+            orderHeader.PaymentStatus = SD.PaymentStatusApproved;
+            _unitofwork.OrderHeader.Update(orderHeader);
+            _unitofwork.Save();
 
+            TempData["Success"] = "Order payment confirmed successfully!";
 
-            return View(orderHeaderId);
+            return RedirectToAction(nameof(Index));
+
         }
-
 
 
         #region API CALLS
@@ -199,8 +167,8 @@ namespace FoodyWeb.Areas.Admin.Controllers
 
             switch (status)
             {
-                case "pending":
-                    objOrderHeaders = objOrderHeaders.Where(u => u.PaymentStatus == SD.PaymentStatusDelayed);
+                case "paymentPending":
+                    objOrderHeaders = objOrderHeaders.Where(u => u.PaymentStatus == SD.PaymentStatusPending);
                     break;
                 case "inprocess":
                     objOrderHeaders = objOrderHeaders.Where(u => u.OrderStatus == SD.statusProcessing);
@@ -208,12 +176,11 @@ namespace FoodyWeb.Areas.Admin.Controllers
                 case "completed":
                     objOrderHeaders = objOrderHeaders.Where(u => u.OrderStatus == SD.statusShipped);
                     break;
-                case "approved":
-                    objOrderHeaders = objOrderHeaders.Where(u => u.OrderStatus == SD.PaymentStatusApproved);
-                    break;
+             
                 default:
                     break;
             }
+            
             switch (paymentType)
             {
                 case "Cash":
@@ -222,6 +189,7 @@ namespace FoodyWeb.Areas.Admin.Controllers
                 case "Card":
                     objOrderHeaders = objOrderHeaders.Where(u => u.PaymentMethod == SD.PaymentMethodCard);
                     break;
+                    
                 default:
                     break;
             }

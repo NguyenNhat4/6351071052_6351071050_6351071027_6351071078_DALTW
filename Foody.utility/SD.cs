@@ -19,7 +19,6 @@ namespace Foody.utility
         public const string statusApproved = "Approved";
         public const string statusProcessing = "Processing";
         public const string statusShipped = "Shipped";
-        public const string statusDelivered = "Delivered";
         public const string statusCancelled = "Cancelled";
         public const string statusRefunded = "Refunded";
 

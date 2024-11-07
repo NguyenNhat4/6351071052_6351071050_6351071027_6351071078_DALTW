@@ -3,7 +3,7 @@ var dataTable;
 
 $(document).ready(function () {
     var url = window.location.search;
-    var status = ["allStatus", "inprocess", "completed", "pending", "approved"];
+    var status = ["allStatus", "inprocess", "completed", "paymentPending", "approved"];
     var paymentType = ["allPayment", "Card", "Cash"];
 
 
@@ -35,11 +35,11 @@ function loadDataTable(status, payMentType) {
         "columns": [
             { data: 'id', "width": "5%" },
             { data: 'name', "width": "20%" },
-            { data: 'applicationUser.email', "width": "25%" },
+            { data: 'applicationUser.email', "width": "20%" },
             { data: 'paymentMethod', "width": "10%" },
             { data: 'orderStatus', "width": "10%" },
             { data: 'paymentStatus',"width":"10%"},
-            { data: 'orderTotal', "width": "10%" },
+            { data: 'orderTotal', "width": "25%" },
             {
                 data: 'id',
                 "render": function (data) {

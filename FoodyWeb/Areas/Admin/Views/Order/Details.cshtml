@@ -1,4 +1,6 @@
 ﻿@model OrderVM
+
+@* && (Model.OrderHeader.PaymentMethod == SD.PaymentMethodCard) *@
 <form method="post">
     <input asp-for="OrderHeader.Id" hidden />
     <br />
@@ -55,7 +57,7 @@
                             <div class="row my-1">
                                 <div class="col-3">Address</div>
                                 <div class="col-9">
-                                    @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
+                                    @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee) && (Model.OrderHeader.PaymentMethod == SD.PaymentMethodCard))
                                     {
                                         <input asp-for="OrderHeader.StreetAddress" type="text" class="form-control" />
                                         <span asp-validation-for="OrderHeader.StreetAddress" class="text-danger"></span>
@@ -69,7 +71,7 @@
                             <div class="row my-1">
                                 <div class="col-3">City</div>
                                 <div class="col-9">
-                                    @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
+                                    @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee) && (Model.OrderHeader.PaymentMethod == SD.PaymentMethodCard))
                                     {
                                         <input asp-for="OrderHeader.City" type="text" class="form-control" />
                                         <span asp-validation-for="OrderHeader.City" class="text-danger"></span>
@@ -95,34 +97,43 @@
                                     <input value="@Model.OrderHeader.OrderDate.ToShortDateString()" readonly type="text" class="form-control" />
                                 </div>
                             </div>
-                      
                             <div class="row my-1">
-                                <div class="col-3">Shipping Date</div>
+                                <div class="col-3">Payment Method</div>
                                 <div class="col-9">
-                                    <input value="@Model.OrderHeader.ShippingDate.ToShortDateString()" readonly type="text" class="form-control" />
+                                    <input value="@Model.OrderHeader.PaymentMethod" readonly type="text" class="form-control" />
                                 </div>
                             </div>
-
-                            @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
+                            @if (Model.OrderHeader.PaymentMethod == SD.PaymentMethodCard)
                             {
                                 <div class="row my-1">
-                                    <div class="col-3">Session ID</div>
+                                    <div class="col-3">Shipping Date</div>
                                     <div class="col-9">
-
-                                        <input asp-for="OrderHeader.SessionId" readonly type="text" class="form-control" />
-
+                                        <input value="@Model.OrderHeader.ShippingDate.ToShortDateString()" readonly type="text" class="form-control" />
                                     </div>
                                 </div>
-                                <div class="row my-1">
-                                    <div class="col-3">Payment Intent ID</div>
-                                    <div class="col-9">
 
-                                        <input asp-for="OrderHeader.PaymentIntentId" readonly type="text" class="form-control" />
+                                @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
+                                {
+                                    <div class="row my-1">
+                                        <div class="col-3">Session ID</div>
+                                        <div class="col-9">
 
+                                            <input asp-for="OrderHeader.SessionId" readonly type="text" class="form-control" />
+
+                                        </div>
                                     </div>
-                                </div>
+                                    <div class="row my-1">
+                                        <div class="col-3">Payment Intent ID</div>
+                                        <div class="col-9">
+
+                                            <input asp-for="OrderHeader.PaymentIntentId" readonly type="text" class="form-control" />
+
+                                        </div>
+                                    </div>
+                                }
+
+                               
                             }
-                
                             <div class="row my-1">
                                 <div class="col-3">Payment Status</div>
                                 <div class="col-9">
@@ -148,11 +159,11 @@
                                             <div class="col-8">
 
                                                 <h6 class="my-0 text-primary">@detail.Product.Name</h6>
-                                                <small class="text-muted">Price : @detail.Price.ToString("c")</small><br />
+                                                <small class="text-muted">Price : @detail.Price.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</small><br />
                                                 <small class="text-muted">Quantity : @detail.Count</small>
                                             </div>
                                             <div class="col-4 text-end">
-                                                <p class="text-success">@((detail.Count * detail.Price).ToString("c"))</p>
+                                                <p class="text-success">@((detail.Count * detail.Price).ToString("C0", new System.Globalization.CultureInfo("vi-VN")))</p>
                                             </div>
                                         </div>
                                     </li>
@@ -163,14 +174,14 @@
                                             <h5 class="text-white">TOTAL </h5>
                                         </div>
                                         <div class="col-6 text-end">
-                                            <h5 class="text-white">@Model.OrderHeader.OrderTotal.ToString("c")</h5>
+                                            <h5 class="text-white">@Model.OrderHeader.OrderTotal.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</h5>
                                         </div>
                                     </div>
                                 </li>
                             </ul>
 
                             @if (Model.OrderHeader.PaymentStatus == SD.PaymentStatusDelayed &&
-                            Model.OrderHeader.OrderStatus == SD.statusDelivered)
+                            Model.OrderHeader.OrderStatus == SD.statusShipped)
                             {
                                 <button type="submit" class="btn btn-success form-control my-1">Pay Now</button>
                             }
@@ -185,15 +196,17 @@
                                 }
                                 @if (Model.OrderHeader.OrderStatus == SD.statusProcessing)
                                 {
-                                    <button type="submit" asp-action="ShipOrder" onclick="return validateInput()" class="btn btn-primary form-control my-1">Ship Order</button>
+                                    <button type="submit" asp-action="ShipOrder"
+                                    
+                                    
+                                    class="btn btn-primary form-control my-1"> Serve Order</button>
+                                }
+                                @if (Model.OrderHeader.OrderStatus == SD.statusShipped && Model.OrderHeader.PaymentStatus != SD.PaymentStatusApproved)
+                                {
+                                    <button type="submit" asp-action="PaymentConfirmation"  class="btn btn-primary form-control my-1">Confirm Payment</button>
                                 }
 
-                                @if (Model.OrderHeader.OrderStatus != SD.statusRefunded &&
-                               Model.OrderHeader.OrderStatus != SD.statusCancelled &&
-                               Model.OrderHeader.OrderStatus != SD.statusShipped)
-                                {
-                                    <button asp-action="CancelOrder" type="submit" class="btn btn-danger form-control my-1">Cancel Order</button>
-                                }
+                              
                             }
                         </div>
                     </div>
@@ -207,6 +220,5 @@
 @section Scripts {
 
     <partial name="_ValidationScriptsPartial" />
-   
 
 }

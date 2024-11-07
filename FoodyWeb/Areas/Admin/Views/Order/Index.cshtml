@@ -4,7 +4,7 @@
     var Card = "text-primary";
     var Cash = "text-primary";
     var allPayment = "text-primary";
-    var pending = "text-primary";
+    var paymentPending = "text-primary";
     var inprocess = "text-primary";
     var completed = "text-primary";
     var approved = "text-primary";
@@ -25,8 +25,8 @@
 
     switch (status)
     {
-        case "pending":
-            pending = "active text-white bg-primary";
+        case "paymentPending":
+            paymentPending = "active text-white bg-primary";
             break;
         case "inprocess":
             inprocess = "active text-white bg-primary";
@@ -71,10 +71,10 @@
             <!-- Status Filter -->
             <ul class="list-group list-group-horizontal-sm">
                 <a style="text-decoration:none;" asp-controller="Order" asp-action="Index" asp-route-status="inprocess" asp-route-paymentType="@paymentType">
-                <li class="list-group-item @inprocess">In Process</li>
+                <li class="list-group-item @inprocess">Order in Process</li>
                 </a>
-                <a style="text-decoration:none;" asp-controller="Order" asp-action="Index" asp-route-status="pending" asp-route-paymentType="@paymentType">
-                <li class="list-group-item @pending">Payment Pending</li>
+                <a style="text-decoration:none;" asp-controller="Order" asp-action="Index" asp-route-status="paymentPending" asp-route-paymentType="@paymentType">
+                <li class="list-group-item @paymentPending">Payment Pending</li>
                 </a>
                 <a style="text-decoration:none;" asp-controller="Order" asp-action="Index" asp-route-status="completed" asp-route-paymentType="@paymentType">
                 <li class="list-group-item @completed">Completed</li>
