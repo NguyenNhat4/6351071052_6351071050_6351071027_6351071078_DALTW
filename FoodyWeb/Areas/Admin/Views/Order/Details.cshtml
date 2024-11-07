@@ -95,32 +95,7 @@
                                     <input value="@Model.OrderHeader.OrderDate.ToShortDateString()" readonly type="text" class="form-control" />
                                 </div>
                             </div>
-                            <div class="row my-1">
-                                <div class="col-3">Carrier</div>
-                                <div class="col-9">
-                                    @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
-                                    {
-                                        <input asp-for="OrderHeader.Carrier" id="carrier" type="text" class="form-control" />
-                                    }
-                                    else
-                                    {
-                                        <input asp-for="OrderHeader.Carrier" readonly type="text" class="form-control" />
-                                    }
-                                </div>
-                            </div>
-                            <div class="row my-1">
-                                <div class="col-3">Tracking</div>
-                                <div class="col-9">
-                                    @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
-                                    {
-                                        <input asp-for="OrderHeader.TrackingNumber" id="trackingNumber" type="text" class="form-control" />
-                                    }
-                                    else
-                                    {
-                                        <input asp-for="OrderHeader.TrackingNumber" readonly type="text" class="form-control" />
-                                    }
-                                </div>
-                            </div>
+                      
                             <div class="row my-1">
                                 <div class="col-3">Shipping Date</div>
                                 <div class="col-9">
@@ -232,26 +207,6 @@
 @section Scripts {
 
     <partial name="_ValidationScriptsPartial" />
-    <script>
-        function validateInput(){
-            if(document.getElementById("trackingNumber").value==""){
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Please enter tracking number!',
-                });
-                return false;
-            }
-            if (document.getElementById("carrier").value =="") {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Please enter carrier!',
-                });
-                return false;
-            }
-            return true;
-        }
-    </script>
+   
 
 }

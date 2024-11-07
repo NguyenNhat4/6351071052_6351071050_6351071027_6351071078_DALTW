@@ -58,7 +58,7 @@
                             </li>
                             
                         }
-                        @if (!User.IsInRole(SD.Role_Admin))
+                        @if (User.IsInRole(SD.Role_Customer))
                         {
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="Customer" asp-controller="Cart" asp-action="Index">

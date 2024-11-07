@@ -34,9 +34,7 @@
         case "completed":
             completed = "active text-white bg-primary";
             break;
-        case "approved":
-            approved = "active text-white bg-primary";
-            break;
+   
         default:
             allStatus = "active text-white bg-primary";
             break;
@@ -81,9 +79,7 @@
                 <a style="text-decoration:none;" asp-controller="Order" asp-action="Index" asp-route-status="completed" asp-route-paymentType="@paymentType">
                 <li class="list-group-item @completed">Completed</li>
                 </a>
-                <a style="text-decoration:none;" asp-controller="Order" asp-action="Index" asp-route-status="approved" asp-route-paymentType="@paymentType">
-                <li class="list-group-item @approved">Approved</li>
-                </a>
+              
                 <a style="text-decoration:none;" asp-controller="Order" asp-action="Index" asp-route-status="allStatus" asp-route-paymentType="@paymentType">
                 <li class="list-group-item @allStatus">All</li>
                 </a>
@@ -95,10 +91,10 @@
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
-                    <th>Phone Number</th>
                     <th>Email</th>
                     <th>Payment Method</th>
-                    <th>Status</th>
+                    <th>Order Status</th>
+                    <th>Payment Status</th>
                     <th>Total</th>
                     <th></th>
                 </tr>

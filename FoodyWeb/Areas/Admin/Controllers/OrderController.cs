@@ -49,14 +49,7 @@ namespace FoodyWeb.Areas.Admin.Controllers
             orderHeaderFromDb.Phonenumber = OrderVM.OrderHeader.Phonenumber;
             orderHeaderFromDb.StreetAddress = OrderVM.OrderHeader.StreetAddress;
             orderHeaderFromDb.City = OrderVM.OrderHeader.City;
-            if (!string.IsNullOrEmpty(OrderVM.OrderHeader.Carrier))
-            {
-                orderHeaderFromDb.Carrier = OrderVM.OrderHeader.Carrier;
-            }
-            if (!string.IsNullOrEmpty(OrderVM.OrderHeader.TrackingNumber))
-            {
-                orderHeaderFromDb.Carrier = OrderVM.OrderHeader.TrackingNumber;
-            }
+        
             _unitofwork.OrderHeader.Update(orderHeaderFromDb);
             _unitofwork.Save();
             TempData["Success"] = "Order Details Updated Successfully.";
@@ -80,8 +73,6 @@ namespace FoodyWeb.Areas.Admin.Controllers
         {
 
             var orderHeader = _unitofwork.OrderHeader.Get(u => u.Id == OrderVM.OrderHeader.Id);
-            orderHeader.TrackingNumber = OrderVM.OrderHeader.TrackingNumber;
-            orderHeader.Carrier = OrderVM.OrderHeader.Carrier;
             orderHeader.OrderStatus = SD.statusShipped;
 
             orderHeader.ShippingDate = DateTime.Now;
@@ -152,8 +143,8 @@ namespace FoodyWeb.Areas.Admin.Controllers
                 {
                     PriceData = new SessionLineItemPriceDataOptions
                     {
-                        UnitAmount = (long)(item.Price * 100), // $20.50 => 2050
-                        Currency = "usd",
+                        UnitAmount = (long)(item.Price * 100),
+                        Currency = "Vnd",
                         ProductData = new SessionLineItemPriceDataProductDataOptions
                         {
                             Name = item.Product.Name
