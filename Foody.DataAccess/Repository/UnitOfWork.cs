@@ -11,7 +11,6 @@ namespace Foody.DataAccess.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
-        public ICompanyRepository Company { get; private set; }
         public ICategoryRepository Category { get; private set; }
 
         public IProductRepository Product { get; private set; }
@@ -28,7 +27,6 @@ namespace Foody.DataAccess.Repository
             OrderHeader = new OrderHeaderRepository(db);
             OrderDetail = new OrderDetailRepository(db);
             ApplicationUser = new ApplicationUserRepository(db);
-            Company = new CompanyRepository(db);
             Category = new CategoryRepository(db);
             Product = new ProductRepository(db);
             ShoppingCart = new ShoppingCartRepository(db);

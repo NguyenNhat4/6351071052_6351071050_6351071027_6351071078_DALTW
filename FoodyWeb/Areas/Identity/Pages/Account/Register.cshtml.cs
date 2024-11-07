@@ -124,9 +124,7 @@ namespace FoodyWeb.Areas.Identity.Pages.Account
             [Required]
 
             public string PhoneNumber { get; set; }
-            public int? CompanyId { get; set; }
-            [ValidateNever]
-              public IEnumerable<SelectListItem> Companylist { get; set; }
+          
         }
 
 
@@ -137,7 +135,6 @@ namespace FoodyWeb.Areas.Identity.Pages.Account
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_Customer)).GetAwaiter().GetResult();
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_Employee)).GetAwaiter().GetResult();
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(SD.Role_Company)).GetAwaiter().GetResult();
             }
 
             Input = new()
@@ -146,11 +143,6 @@ namespace FoodyWeb.Areas.Identity.Pages.Account
                 {
                     Text = i,
                     Value = i
-                }),
-                 Companylist =  _unitOfWork.Company.GetAll().Select(i => new SelectListItem
-                {
-                    Text = i.Name,
-                    Value = i.Id.ToString()
                 })
             };
 
@@ -176,10 +168,7 @@ namespace FoodyWeb.Areas.Identity.Pages.Account
                 user.City = Input.City;
                 user.Name = Input.Name;
                 user.PhoneNumber = Input.PhoneNumber;
-                if (Input.Role == SD.Role_Company)
-                {
-                    user.CompanyId = Input.CompanyId;
-                }
+              
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)

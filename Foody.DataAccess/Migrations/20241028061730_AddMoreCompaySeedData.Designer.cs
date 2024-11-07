@@ -388,25 +388,8 @@ namespace Foody.DataAccess.Migrations
 
             modelBuilder.Entity("Foody.Models.ApplicationUser", b =>
                 {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+                  
 
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                   
-                    b.Property<string>("StreetAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasIndex("CompanyId");
-
-                    b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
             modelBuilder.Entity("Foody.Models.Product", b =>
@@ -473,11 +456,7 @@ namespace Foody.DataAccess.Migrations
 
             modelBuilder.Entity("Foody.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("Foody.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId");
-
-                    b.Navigation("Company");
+                    
                 });
 #pragma warning restore 612, 618
         }
