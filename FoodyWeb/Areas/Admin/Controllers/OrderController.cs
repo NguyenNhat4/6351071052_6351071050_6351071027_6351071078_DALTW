@@ -178,6 +178,7 @@ namespace FoodyWeb.Areas.Admin.Controllers
                     break;
              
                 default:
+                   objOrderHeaders = objOrderHeaders.Where(u => u.PaymentStatus != SD.PaymentStatusApproved);
                     break;
             }
             

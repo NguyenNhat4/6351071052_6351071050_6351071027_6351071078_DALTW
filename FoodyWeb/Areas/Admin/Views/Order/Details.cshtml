@@ -140,7 +140,7 @@
                                     <input asp-for="OrderHeader.PaymentStatus" readonly type="text" class="form-control" />
                                 </div>
                             </div>
-                            @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
+                            @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee) && Model.OrderHeader.PaymentMethod == SD.PaymentMethodCard)
                             {
                                 <button type="submit" asp-action="UpdateOrderDetail" class="btn btn-warning form-control my-1">Update Order Details</button>
                             }
