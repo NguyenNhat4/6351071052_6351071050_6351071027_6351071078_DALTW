@@ -21,12 +21,12 @@ namespace Foody.Models
         public string? Description { get; set; }
 
         [Required]
-        [Display(Name = "Price")]
-        [Range(1, 1000)]
+        [Display(Name = "Origin Price")]
+        [Range(1001, int.MaxValue, ErrorMessage = "The total must be greater than 1000 VND.")]
         public double ListPrice { get; set; }
         [Required]
-        [Display(Name = "Price below 50")]
-        [Range(1, 1000)]
+        [Display(Name = "Price")]
+        [Range(1001, int.MaxValue, ErrorMessage = "The total must be greater than 1000 VND.")]
         public double Price { get; set; }
 
         [ForeignKey(nameof(Category))]

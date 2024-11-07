@@ -6,17 +6,14 @@
         <div class="col-lg-3 col-sm-6">
             <div class="row p-2">
                 <div class="col-12 p-1">
-                    <div class="card border-0 p-3 shadow  border-top border-5 rounded">
-                        @if (product.imageUrl != null && product.imageUrl.Count() > 0)
+                    <div class="card border-0 p-3 shadow border-top border-5 rounded">
+                        @if (!string.IsNullOrEmpty(product.imageUrl) && product.imageUrl.Count() > 0)
                         {
-                          
                             <img src="@product.imageUrl" class="card-img-top img-custom-size rounded" alt="Product Image">
-
                         }
                         else
                         {
                             <img src="https://placehold.co/500x600/png" class="card-img-top img-custom-size rounded" alt="Product Image">
-
                         }
 
                         <div class="card-body pb-0">
@@ -25,26 +22,26 @@
                             </div>
                             <div class="pl-1">
                                 <p class="text-dark text-opacity-75 text-center mb-0">
-                                    List Price:
+                                    Origin Price:
                                     <span class="text-decoration-line-through">
-                                        @product.ListPrice.ToString("C", new System.Globalization.CultureInfo("vi-VN"));
+                                        @product.ListPrice.ToString("C", new System.Globalization.CultureInfo("vi-VN"))
                                     </span>
                                 </p>
                                 <p class="text-dark text-opacity-75 text-center mb-0">
                                     Price:
-                                    <span >
-                                        @product.Price.ToString("C", new System.Globalization.CultureInfo("vi-VN"));
+                                    <span>
+                                        @product.Price.ToString("C", new System.Globalization.CultureInfo("vi-VN"))
                                     </span>
                                 </p>
                             </div>
-                        
                         </div>
+
                         @if (!User.IsInRole(SD.Role_Admin))
                         {
                             <div>
                                 <a asp-action="Details"
-                                asp-route-productId="@product.Id"
-                                class="btn btn-primary bg-gradient border-0 form-control">
+                                   asp-route-productId="@product.Id"
+                                   class="btn btn-primary bg-gradient border-0 form-control">
                                     <i class="bi bi-cart"></i> Details
                                 </a>
                             </div>

@@ -55,8 +55,10 @@ namespace Foody.DataAccess.Data
                 }
                 );
             modelBuilder.Entity<Category>().HasData(
-                new Category { Id = 1, Name = "Drinks", DisplayOrder = 1 },
-                new Category { Id = 2, Name = "Foods", DisplayOrder = 2 }
+                new Category { Id = 1, Name = "Drinks" },
+                new Category { Id = 2, Name = "Foods" },
+                new Category { Id = 3, Name = "Addition Foods" },
+                new Category { Id = 4, Name = "Others" }
                 );
           
 
@@ -69,18 +71,7 @@ namespace Foody.DataAccess.Data
                     Description = "",
                     ListPrice = 99,
                     Price = 90,
-                                   CategoryId = 1,
-                    imageUrl = ""
-                },
-                new Product
-                {
-                    Id = 2,
-                    Name = "Coca Cola",
-                    Description = "",
-                    ListPrice = 99,
-                    Price = 90,
-                   
-                    CategoryId = 1,
+                CategoryId = 1,
                     imageUrl = ""
                 }
 
