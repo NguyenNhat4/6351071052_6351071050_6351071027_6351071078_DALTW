@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Foody.utility;
+using Foody.DataAccess.Repository.IRepository;
 
 namespace FoodyWeb.Areas.Identity.Pages.Account
 {
@@ -21,12 +23,15 @@ namespace FoodyWeb.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger,IUnitOfWork unitOfWork)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _unitOfWork = unitOfWork;
         }
+
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -114,6 +119,19 @@ namespace FoodyWeb.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    _logger.LogInformation("User logged in.");
+
+                    // Retrieve the user ID
+                    var user = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
+                    var userId = user.Id;
+
+                    // Get the total count of items in the user's cart
+                    var cartItems = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId);
+                    int cartItemCount = cartItems.Sum(item => item.Count);
+
+                    // Update the session with the total count of items in the cart
+                    HttpContext.Session.SetInt32(SD.SessionCart, cartItemCount);
+
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }
