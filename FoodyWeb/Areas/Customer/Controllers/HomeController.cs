@@ -1,6 +1,8 @@
 using Foody.DataAccess.Repository.IRepository;
 using Foody.Models;
+using Foody.utility;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -43,17 +45,32 @@ namespace FoodyWeb.Areas.Customer.Controllers
         var userID = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
         shoppingCart.ApplicationUserId = userID;
          
-        ShoppingCart cartFromDb = _unitOfWork.ShoppingCart.Get(u => u.ApplicationUserId == shoppingCart.ApplicationUserId && u.ProductId == shoppingCart.ProductId);
-        if (cartFromDb == null)
+        ShoppingCart cartFromDb = _unitOfWork.ShoppingCart.Get(u => u.ApplicationUserId == shoppingCart.ApplicationUserId && u.ProductId == shoppingCart.ProductId,null,false);
+
+            if (cartFromDb == null)
         {
             _unitOfWork.ShoppingCart.Add(shoppingCart);
+                _unitOfWork.Save();
+
         }
-        else
+            else
         {
             cartFromDb.Count += shoppingCart.Count;
             _unitOfWork.ShoppingCart.Update(cartFromDb);
-        }
-            _unitOfWork.Save();
+                _unitOfWork.Save();
+            }
+            int productCount = 0;
+
+            foreach (var item in _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == shoppingCart.ApplicationUserId))
+            {
+                productCount += item.Count;
+            }
+
+
+            if (productCount > 0)
+            {
+                HttpContext.Session.SetInt32(SD.SessionCart, productCount);
+            }
             TempData["success"] = "Item has been added to cart";
             return RedirectToAction("Index");   
         }

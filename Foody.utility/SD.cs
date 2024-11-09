@@ -28,6 +28,7 @@ namespace Foody.utility
 
         public const string PaymentMethodCash = "Cash";
         public const string PaymentMethodCard = "Card";
+        public const string SessionCart = "ShoppingCartSession";
 
     }
 }

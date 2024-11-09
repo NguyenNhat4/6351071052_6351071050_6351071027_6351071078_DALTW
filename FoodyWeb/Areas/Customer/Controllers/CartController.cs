@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Stripe.Checkout;
+using Microsoft.AspNetCore.Http;
 using System.Net;
 using Foody.DataAccess.Migrations;
 namespace FoodyWeb.Areas.Customer.Controllers
@@ -49,6 +50,8 @@ namespace FoodyWeb.Areas.Customer.Controllers
             cartFromDb.Count += 1;
             _unitOfWork.ShoppingCart.Update(cartFromDb);
             _unitOfWork.Save();
+            HttpContext.Session.SetInt32(SD.SessionCart, CountAllProductFromUser(cartFromDb.ApplicationUserId));
+
             return RedirectToAction(nameof(Index));
         }
         public IActionResult Minus(int cartId)
@@ -65,13 +68,27 @@ namespace FoodyWeb.Areas.Customer.Controllers
                 _unitOfWork.ShoppingCart.Update(cartFromDb);
             }
             _unitOfWork.Save();
+            HttpContext.Session.SetInt32(SD.SessionCart, CountAllProductFromUser(cartFromDb.ApplicationUserId));
+
             return RedirectToAction(nameof(Index));
+        }
+
+        public int CountAllProductFromUser(string userId)
+        {
+            int count = 0;
+            var allProduct = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId);
+            foreach (var product in allProduct)
+            {
+                count += product.Count;
+            }
+            return count;
         }
         public IActionResult Remove(int cartId)
         {
             var cartFromDb = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
             _unitOfWork.ShoppingCart.Remove(cartFromDb);
             _unitOfWork.Save();
+            HttpContext.Session.SetInt32(SD.SessionCart, CountAllProductFromUser(cartFromDb.ApplicationUserId));
             return RedirectToAction(nameof(Index));
         }
         
