@@ -21,6 +21,8 @@
   <ItemGroup>
 
 		  <ProjectReference Include="..\Foody.Models\Foody.Models.csproj" />
+
+		  <ProjectReference Include="..\Foody.utility\Foody.utility.csproj" />
       </ItemGroup>
 
 </Project>

@@ -1,3 +1,4 @@
+
 using Foody.DataAccess.Repository;
 using Foody.DataAccess.Repository.IRepository;
 using Foody.DataAccess.Data;
@@ -5,10 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Foody.utility;
-using Foody.DataAccess.Data;
-using Foody.DataAccess.Repository.IRepository;
-using Foody.DataAccess.Repository;
 using Stripe;
+using Foody.DataAccess.DbInitializer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,21 +19,21 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
-builder.Services.ConfigureApplicationCookie(options =>
-{
+builder.Services.ConfigureApplicationCookie(options => {
     options.LoginPath = $"/Identity/Account/Login";
     options.LogoutPath = $"/Identity/Account/Logout";
     options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
 });
+
+
 builder.Services.AddDistributedMemoryCache();
-// Add session services
-builder.Services.AddSession(options =>
-{
-    // Configure session options here
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Example: Set session timeout to 30 minutes
+builder.Services.AddSession(options => {
+    options.IdleTimeout = TimeSpan.FromMinutes(100);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
@@ -54,10 +53,21 @@ StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey"
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapRazorPages();
 app.UseSession();
+SeedDatabase();
+app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+
+void SeedDatabase()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+        dbInitializer.Initialize();
+    }
+}
