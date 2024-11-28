@@ -10,14 +10,7 @@ namespace Foody.DataAccess.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "PostalCode",
-                table: "OrderHeaders");
-
-            migrationBuilder.DropColumn(
-                name: "State",
-                table: "OrderHeaders");
-
+   
             migrationBuilder.RenameColumn(
                 name: "PhoneNumber",
                 table: "OrderHeaders",
@@ -32,12 +25,7 @@ namespace Foody.DataAccess.Migrations
                 table: "OrderHeaders",
                 newName: "PhoneNumber");
 
-            migrationBuilder.AddColumn<string>(
-                name: "PostalCode",
-                table: "OrderHeaders",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
+      
 
             migrationBuilder.AddColumn<string>(
                 name: "State",

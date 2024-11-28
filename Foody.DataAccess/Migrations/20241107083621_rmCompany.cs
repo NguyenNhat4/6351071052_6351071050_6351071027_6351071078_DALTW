@@ -12,20 +12,8 @@ namespace Foody.DataAccess.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_AspNetUsers_Companys_CompanyId",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Companys");
-
-            migrationBuilder.DropIndex(
-                name: "IX_AspNetUsers_CompanyId",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
-                name: "CompanyId",
-                table: "AspNetUsers");
+           
+           
         }
 
         /// <inheritdoc />
@@ -68,12 +56,7 @@ namespace Foody.DataAccess.Migrations
                 table: "AspNetUsers",
                 column: "CompanyId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUsers_Companys_CompanyId",
-                table: "AspNetUsers",
-                column: "CompanyId",
-                principalTable: "Companys",
-                principalColumn: "Id");
+           
         }
     }
 }

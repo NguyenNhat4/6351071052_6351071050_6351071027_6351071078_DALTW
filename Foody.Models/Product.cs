@@ -19,16 +19,16 @@ namespace Foody.Models
 
 
         public string? Description { get; set; }
-
-        [Required]
-        [Display(Name = "Origin Price")]
-        [Range(1001, int.MaxValue, ErrorMessage = "The total must be greater than 1000 VND.")]
-        public double ListPrice { get; set; }
         [Required]
         [Display(Name = "Price")]
         [Range(1001, int.MaxValue, ErrorMessage = "The total must be greater than 1000 VND.")]
         public double Price { get; set; }
 
+        [Required]
+        [Display(Name = "Origin Price")]
+        [Range(1001, int.MaxValue, ErrorMessage = "The total must be greater than 1000 VND.")]
+        public double ListPrice { get; set; }
+     
         [ForeignKey(nameof(Category))]
         [Required]
         public int CategoryId { get; set; }
