@@ -33,6 +33,7 @@ namespace Foody.DataAccess.Data
                 new Category { Id = 2, Name = "Foods" },
                 new Category { Id = 3, Name = "Addition Foods" },
                 new Category { Id = 4, Name = "Others" }
+
                 );
           
 

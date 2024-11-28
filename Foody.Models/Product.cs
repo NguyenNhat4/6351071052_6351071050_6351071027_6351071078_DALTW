@@ -37,8 +37,5 @@ namespace Foody.Models
         public Category Category { get; set; }
         [ValidateNever]
         public string? imageUrl { get; set; }
-
-
-
     }
 }
