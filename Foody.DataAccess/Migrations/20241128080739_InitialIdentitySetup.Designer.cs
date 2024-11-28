@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Foody.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241126091047_InitialIdentitySetup")]
+    [Migration("20241128080739_InitialIdentitySetup")]
     partial class InitialIdentitySetup
     {
         /// <inheritdoc />
