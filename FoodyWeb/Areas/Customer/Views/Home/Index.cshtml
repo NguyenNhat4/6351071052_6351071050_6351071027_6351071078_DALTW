@@ -1,5 +1,24 @@
 ﻿@model IEnumerable<Product>
 
+    @{
+      var type = Context.Request.Query["type"];
+    }
+<!-- Category Filter Section -->
+<div class="mb-4">
+    <h4 class="text-center text-uppercase">Filter Product</h4>
+    <div class="d-flex justify-content-center mb-3">
+        <button   class="btn btn-outline-dark mx-2 filter-btn active" data-category="All">
+            <i class="bi bi-box"></i> All
+        </button>
+        @foreach (var category in Model.Select(p => p.Category).Distinct())
+        {
+                    <button  id="btn-category"  data-category="@category.Name" class="btn btn-outline-dark mx-2 filter-btn" >
+                    <i class="bi bi-tags"></i> @category.Name
+                </button>
+            
+        }
+    </div>
+</div>
 <div class="row pb-3">
     @foreach (var product in Model)
     {
@@ -52,3 +71,74 @@
         </div>
     }
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
+
+ 
+
+ <script>
+
+
+
+ $(document).ready(function () {
+
+
+ function filterCategory(ctType) {
+             var url = '@Url.Action("GetAll", "Home", new { area = "Customer" })';
+             $.ajax({
+             url: url,
+             type: 'GET',
+              data: { categoryType: ctType },
+              success: function (response) {
+                  var productListHtml = '';
+                $.each(response.data, function (index, product) {
+                    productListHtml += `
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="row p-2">
+                                <div class="col-12 p-1">
+                                    <div class="card border-0 p-3 shadow border-top border-5 rounded">
+                                        <img src="${product.imageUrl || 'https://placehold.co/500x600/png'}" class="card-img-top img-custom-size rounded" alt="Product Image">
+                                        <div class="card-body pb-0">
+                                            <p class="card-title h5 text-dark opacity-75 text-uppercase text-center">${product.name}</p>
+                                            <p class="text-dark text-opacity-75 text-center mb-0">
+                                                Origin Price: <span class="text-decoration-line-through">${product.listPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span>
+                                            </p>
+                                            <p class="text-dark text-opacity-75 text-center mb-0">
+                                                Price: <span>${product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                // Update the product list on the page
+                $('.row.pb-3').html(productListHtml);
+                 },
+                 error: function () {
+                     alert("Error filtering numbers.");
+                 }
+            
+             });
+
+ }
+
+    $(".filter-btn").click(function () {
+         var categoryType = $(this).data("category");
+            filterCategory(categoryType);
+               $(".filter-btn").removeClass("active");
+            $(this).addClass("active");
+     });
+
+
+ });
+
+
+
+
+ </script>
