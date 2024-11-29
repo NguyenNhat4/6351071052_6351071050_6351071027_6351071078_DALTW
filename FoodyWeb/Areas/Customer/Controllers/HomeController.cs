@@ -100,15 +100,33 @@ namespace FoodyWeb.Areas.Customer.Controllers
         [HttpGet]
         public IActionResult GetAll(string? categoryType)
         {
-
-
+            // Fetch all products with their related category
             List<Product> objProductList = _unitOfWork.Product.GetAll(includeProperties: "Category").ToList();
-            if (categoryType != "All" && !string.IsNullOrEmpty(categoryType) )
+
+            // Filter products by category type if specified
+            if (!string.IsNullOrEmpty(categoryType) && categoryType != "All")
             {
-                objProductList =  objProductList.Where(u => u.Category.Name == categoryType).ToList();
+                objProductList = objProductList.Where(u => u.Category.Name == categoryType).ToList();
             }
-            return Json(new { data = objProductList });
+
+            // Check if the user is an admin
+            var isAdmin = User.IsInRole(SD.Role_Admin);
+
+            // Prepare the JSON response with product data and URLs
+            var result = objProductList.Select(product => new
+            {
+                id = product.Id,
+                name = product.Name,
+                imageUrl = product.imageUrl,
+                listPrice = product.ListPrice,
+                price = product.Price,
+                detailsUrl = Url.Action("Details", "Home", new { productId = product.Id }), // Generate Details URL dynamically
+            }).ToList();
+
+            // Return the JSON response
+            return Json(new { data = result, isAdmin });
         }
+
         #endregion
     }
 }
