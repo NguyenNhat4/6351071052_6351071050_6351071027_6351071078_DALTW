@@ -143,6 +143,8 @@ namespace FoodyWeb.Areas.Customer.Controllers
                 _unitOfWork.OrderDetail.Add(orderDetail);
                 _unitOfWork.Save();
             }
+            HttpContext.Session.SetInt32(SD.SessionCart, 0);
+
             return RedirectToAction(nameof(OrderConfirmation), new { id = orderheader.Id });
    }
 
