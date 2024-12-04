@@ -30,6 +30,7 @@ namespace Foody.DataAccess.Repository
                 }
                 objFromDb.Name = obj.Name;
                 objFromDb.Price = obj.Price;
+                objFromDb.ListPrice = obj.ListPrice;
                 objFromDb.CategoryId = obj.CategoryId;
                 objFromDb.Description = obj.Description;
             }

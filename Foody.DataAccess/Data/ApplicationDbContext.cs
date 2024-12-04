@@ -44,8 +44,8 @@ namespace Foody.DataAccess.Data
                     Id = 1,
                     Name = "Prime",
                     Description = "",
-                    ListPrice = 99,
-                    Price = 90,
+                    ListPrice = 99000,
+                    Price = 90000,
                 CategoryId = 1,
                     imageUrl = ""
                 }
