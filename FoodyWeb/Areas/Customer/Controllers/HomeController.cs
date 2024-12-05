@@ -23,6 +23,7 @@ namespace FoodyWeb.Areas.Customer.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.CategoryList = _unitOfWork.Category.GetAll();
             IEnumerable<Product> menuItemList = _unitOfWork.Product.GetAll(includeProperties:"Category");
             return View(menuItemList);
         }
