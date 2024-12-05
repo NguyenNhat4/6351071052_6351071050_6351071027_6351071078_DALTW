@@ -27,9 +27,9 @@
                         <div class="col-12 col-md-6 pb-4">
                             <span class="badge">@Model.Product.Category.Name</span>
                         </div>
-                    
+
                         <div class="row ps-2">
-                            <h6 class="text-dark text-opacity-50  pb-2">
+                            <h6 class="text-dark text-opacity-50 pb-2">
                                 List Price:
                                 <span class="text-decoration-line-through">
                                     @Model.Product.ListPrice.ToString("C", new System.Globalization.CultureInfo("vi-VN"))
@@ -41,9 +41,8 @@
                                 <div class="text-dark text-opacity-50 fw-semibold">Quantity</div>
                             </div>  
                             <div class="p-1 col-3 col-lg-2 bg-white border-bottom">
-                                <div class="text-dark text-opacity-50 fw-semibold">1-50</div>
+                                <div class="text-dark text-opacity-50 fw-semibold"></div>
                             </div>
-                          
                         </div>
                         <div class="row text-center ps-2">
                             <div class="p-1 col-3 col-lg-2 bg-white text-warning fw-bold">
@@ -52,31 +51,29 @@
                             <div class="p-1 col-3 col-lg-2 bg-white text-warning fw-bold">
                                 <div>@Model.Product.Price.ToString("C", new System.Globalization.CultureInfo("vi-VN"))</div>
                             </div>
-                         
                         </div>
-                        <div class="row pl-2 my-3">
-                            @* <p class="text-secondary lh-sm">@Html.Raw(Model.Product.Description)</p> *@
-                        </div>
-                        <div class="row pl-2 mb-3">
-                            <div class="col-md-4">
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text bg-primary text-white border-0 fw-semibold"
-                                          id="inputGroup-sizing-default">
-                                        Count
-                                    </span>
-                                    <input asp-for="Count" type="number" value="1" class="form-control text-end"
-                                           aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" />
-                                </div>
+
+                        <!-- Quantity Adjustment Section -->
+                        <div class="row pl-2 mb-3 align-items-center">
+                            <label for="quantity" class="col-md-auto">Count:</label>
+                            <div class="col-md-auto d-flex align-items-center">
+                                <button type="button" id="decrease" class="btn btn-outline-secondary">−</button>
+                                <input type="number" id="quantity" name="Count" value="1" min="1" max="50" 
+                                       class="form-control mx-2 text-center" aria-label="Quantity" readonly />
+                                <button type="button" id="increase" class="btn btn-outline-secondary">+</button>
                             </div>
                         </div>
+
+                        <!-- Add to Cart Button -->
                         <div class="row">
                             <div class="col-12 col-md-6 pb-1">
                                 <button type="submit"
-                                        class="btn btn-primary bg-gradient  w-100 py-2 text-uppercase fw-semibold">
-                                                          Add to Cart 
+                                        class="btn btn-primary bg-gradient w-100 py-2 text-uppercase fw-semibold">
+                                    Add to Cart 
                                 </button>
                             </div>
                         </div>
+
                     </div>
 
                 </div>
@@ -84,3 +81,26 @@
         </div>
     </div>
 </form>
+
+<script>
+// JavaScript for handling the quantity buttons
+document.addEventListener('DOMContentLoaded', function () {
+    const quantityInput = document.getElementById('quantity');
+    const increaseButton = document.getElementById('increase');
+    const decreaseButton = document.getElementById('decrease');
+
+    increaseButton.addEventListener('click', function () {
+        let currentValue = parseInt(quantityInput.value);
+        if (currentValue < 50) { // Limit to 50
+            quantityInput.value = currentValue + 1;
+        }
+    });
+
+    decreaseButton.addEventListener('click', function () {
+        let currentValue = parseInt(quantityInput.value);
+        if (currentValue > 1) { // Minimum is 1
+            quantityInput.value = currentValue - 1;
+        }
+    });
+});
+</script>
