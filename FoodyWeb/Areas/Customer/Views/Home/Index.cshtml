@@ -79,75 +79,70 @@
 
 
  
+<script>
+    $(document).ready(function () {
+        function filterCategory(ctType) {
+            var url = '@Url.Action("GetAll", "Home", new { area = "Customer" })';
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: { categoryType: ctType },
+                success: function (response) {
+                    var productListHtml = '';
 
- <script>
-
-
-
- $(document).ready(function () {
-
-
- function filterCategory(ctType) {
-             var url = '@Url.Action("GetAll", "Home", new { area = "Customer" })';
-             $.ajax({
-             url: url,
-             type: 'GET',
-              data: { categoryType: ctType },
-              success: function (response) {
-                  var productListHtml = '';
-                $.each(response.data, function (index, product) {
-        productListHtml += `
-            <div class="col-lg-3 col-sm-6">
-                <div class="row p-2">
-                    <div class="col-12 p-1">
-                        <div class="card border-0 p-3 shadow border-top border-5 rounded">
-                            <img src="${product.imageUrl || 'https://placehold.co/500x600/png'}" class="card-img-top img-custom-size rounded" alt="Product Image">
-                            <div class="card-body pb-0">
-                                <p class="card-title h5 text-dark opacity-75 text-uppercase text-center">${product.name}</p>
-                                <p class="text-dark text-opacity-75 text-center mb-0">
-                                    Origin Price: <span class="text-decoration-line-through">${product.listPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span>
-                                </p>
-                                <p class="text-dark text-opacity-75 text-center mb-0">
-                                    Price: <span>${product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span>
-                                </p>
-                            </div>
-                            ${
-                                !response.isAdmin
+                    if (response.data.length === 0) {
+                        // Display a "No Product Found" message
+                        productListHtml = `
+                                <div class="col-12 text-center my-5">
+                                    <h4 class="text-muted">No products found for the selected category.</h4>
+                                </div>
+                            `;
+                    } else {
+                        $.each(response.data, function (index, product) {
+                            productListHtml += `
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div class="row p-2">
+                                            <div class="col-12 p-1">
+                                                <div class="card border-0 p-3 shadow border-top border-5 rounded">
+                                                    <img src="${product.imageUrl || 'https://placehold.co/500x600/png'}" class="card-img-top img-custom-size rounded" alt="Product Image">
+                                                    <div class="card-body pb-0">
+                                                        <p class="card-title h5 text-dark opacity-75 text-uppercase text-center">${product.name}</p>
+                                                        <p class="text-dark text-opacity-75 text-center mb-0">
+                                                            Origin Price: <span class="text-decoration-line-through">${product.listPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span>
+                                                        </p>
+                                                        <p class="text-dark text-opacity-75 text-center mb-0">
+                                                            Price: <span>${product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span>
+                                                        </p>
+                                                    </div>
+                                                    ${!response.isAdmin
                                     ? `<div>
-                                         <a href="${product.detailsUrl}" class="btn btn-primary bg-gradient border-0 form-control">
-                                             <i class="bi bi-cart"></i> Details
-                                         </a>
-                                       </div>`
+                                                                 <a href="${product.detailsUrl}" class="btn btn-primary bg-gradient border-0 form-control">
+                                                                     <i class="bi bi-cart"></i> Details
+                                                                 </a>
+                                                               </div>`
                                     : ''
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-    });
+                                }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                        });
+                    }
 
-    $('.row.pb-3').html(productListHtml);
-                 },
-                 error: function () {
-                     alert("Error filtering numbers.");
-                 }
-            
-             });
+                    $('.row.pb-3').html(productListHtml);
+                },
+                error: function () {
+                    alert("Error filtering products.");
+                }
+            });
+        }
 
- }
-
-    $(".filter-btn").click(function () {
-         var categoryType = $(this).data("category");
+        $(".filter-btn").click(function () {
+            var categoryType = $(this).data("category");
             filterCategory(categoryType);
-               $(".filter-btn").removeClass("active");
+            $(".filter-btn").removeClass("active");
             $(this).addClass("active");
-     });
-
-
- });
-
-
-
-
- </script>
+        });
+    });
+</script>
