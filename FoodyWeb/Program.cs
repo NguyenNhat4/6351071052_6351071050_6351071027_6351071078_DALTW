@@ -5,9 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Foody.utility;
-using Foody.DataAccess.Data;
-using Foody.DataAccess.Repository.IRepository;
-using Foody.DataAccess.Repository;
 using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
