@@ -1,6 +1,6 @@
 ﻿# FoodyWeb
- Link to website: http://foodyweb.somee.com/
-FoodyWeb is a web application designed to manage food orders and payments. This project demonstrates the integration of various technologies including ASP.NET Core MVC, Entity Framework Core, Identity for authentication, and Stripe for payment processing.
+ -Link to website: http://foodyweb.somee.com/
+-FoodyWeb is a web application designed to manage food orders and payments. This project demonstrates the integration of various technologies including ASP.NET Core MVC, Entity Framework Core, Identity for authentication, and Stripe for payment processing.
 
 ## Table of Contents
 
