@@ -11,8 +11,7 @@ using Stripe;
 namespace FoodyWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = SD.Role_Admin)]
-
+    [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
     public class OrderController : Controller
     {
         [BindProperty]

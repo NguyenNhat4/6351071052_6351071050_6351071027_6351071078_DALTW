@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace FoodyWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = SD.Role_Admin)]
+    [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
     public class ProductController : Controller
     {
         public readonly IUnitOfWork _unitOfWork;

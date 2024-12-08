@@ -33,8 +33,10 @@
                         </li>
 
                       
-                        @if (User.IsInRole(SD.Role_Admin))
+                        @if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
                         {
+
+                        
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Product Managment
@@ -53,11 +55,13 @@
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="Admin" asp-controller="Order" asp-action="Index">Manage orders</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="Admin" asp-controller="User" asp-action="Index">Manage User</a>
-                            </li>
+                        
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="Admin" asp-controller="User" asp-action="Index">Manage User</a>
+                                </li>
                             
                         }
+                       
                         @if (User.IsInRole(SD.Role_Customer))
                         {
                             @if (HttpContextAccessor.HttpContext.Session.GetInt32(SD.SessionCart) != null)
