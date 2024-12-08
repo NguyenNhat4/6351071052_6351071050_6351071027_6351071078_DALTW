@@ -23,7 +23,7 @@ FoodyWeb is a web application designed to manage food orders and payments. This 
 ## Technologies
 
 - **Backend**: ASP.NET Core 8.0
-- **Frontend**: Razor Pages, JavaScript
+- **Frontend**: Razor Pages, JavaScript, Bootstrap, jquery.
 - **Database**: Entity Framework Core with SQL Server 
 - **Payment Processing**: Stripe
 - **Others**: Identity for user management
