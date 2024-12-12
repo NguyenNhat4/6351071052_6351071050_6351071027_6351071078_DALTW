@@ -34,6 +34,38 @@ namespace FoodyWeb.Areas.Admin.Controllers
             return View();
         }
 
+        public ActionResult Bieudoxe()
+        {
+            // Tạo một dictionary ánh xạ CategoryId với tên loại
+            var categoryMapping = new Dictionary<int, string>
+    {
+        { 1, "Drinks" },
+        { 2, "Foods" },
+        { 3, "Addition Foods" },
+        { 6, "Street food" },
+        { 1005, "Fry foods" },
+        { 1006, "Mukang" }
+    };
+
+            var objCategoryList = _unitOfWork.Product.GetAll()
+                .GroupBy(x => (x.CategoryId != 0 && categoryMapping.ContainsKey(x.CategoryId))
+                    ? categoryMapping[x.CategoryId]  // Lấy tên loại từ dictionary
+                    : "Không có loại") // Nếu không có CategoryId hợp lệ, nhóm theo "Không có loại"
+                .Select(g => new
+                {
+                    TenLoaiXe = g.Key, // Tên loại sản phẩm
+                    SoLuongXe = g.Count() // Đếm số lượng sản phẩm trong nhóm
+                })
+                .ToList()
+                .Select(x => new ThongKeXeViewModel
+                {
+                    TenLoaiXe = x.TenLoaiXe, // Hiển thị tên loại xe
+                    SoLuongXe = x.SoLuongXe
+                })
+                .ToList();
+
+            return View(objCategoryList);
+        }
 
         [HttpPost]
         public IActionResult Create(Category obj)
