@@ -36,37 +36,31 @@ namespace FoodyWeb.Areas.Admin.Controllers
 
         public ActionResult Bieudoxe()
         {
-            // Tạo một dictionary ánh xạ CategoryId với tên loại
-            var categoryMapping = new Dictionary<int, string>
-    {
-        { 1, "Drinks" },
-        { 2, "Foods" },
-        { 3, "Addition Foods" },
-        { 6, "Street food" },
-        { 1005, "Fry foods" },
-        { 1006, "Mukang" }
-    };
+            // Retrieve all categories from the database dynamically
+            var categories = _unitOfWork.Category.GetAll().ToDictionary(c => c.Id, c => c.Name);
 
             var objCategoryList = _unitOfWork.Product.GetAll()
-                .GroupBy(x => (x.CategoryId != 0 && categoryMapping.ContainsKey(x.CategoryId))
-                    ? categoryMapping[x.CategoryId]  // Lấy tên loại từ dictionary
-                    : "Không có loại") // Nếu không có CategoryId hợp lệ, nhóm theo "Không có loại"
-                .Select(g => new
+                .GroupBy(x => x.CategoryId != 0 && categories.ContainsKey(x.CategoryId)
+                    ? categories[x.CategoryId]  // Use the actual category name from database
+                    : "Uncategorized") // Use "Uncategorized" for products without a valid category
+                .Select(g => new ThongKeXeViewModel
                 {
-                    TenLoaiXe = g.Key, // Tên loại sản phẩm
-                    SoLuongXe = g.Count() // Đếm số lượng sản phẩm trong nhóm
+                    TenLoaiXe = g.Key, // Category name
+                    SoLuongXe = g.Count() // Number of products in the category
                 })
-                .ToList()
-                .Select(x => new ThongKeXeViewModel
-                {
-                    TenLoaiXe = x.TenLoaiXe, // Hiển thị tên loại xe
-                    SoLuongXe = x.SoLuongXe
-                })
+                .OrderByDescending(x => x.SoLuongXe) // Optional: Sort by product count
+                .ToList();
+
+            // Additional insights
+            ViewBag.TotalCategories = categories.Count;
+            ViewBag.TotalProducts = _unitOfWork.Product.GetAll().Count();
+            ViewBag.CategoriesWithNoProducts = categories.Keys
+                .Where(catId => !_unitOfWork.Product.GetAll().Any(p => p.CategoryId == catId))
+                .Select(catId => categories[catId])
                 .ToList();
 
             return View(objCategoryList);
         }
-
         [HttpPost]
         public IActionResult Create(Category obj)
         {
