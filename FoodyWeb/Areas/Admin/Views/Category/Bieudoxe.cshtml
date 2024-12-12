@@ -1,0 +1,69 @@
+﻿@model IEnumerable<ThongKeXeViewModel>
+@{
+    ViewData["Title"] = "Bieudoxe";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Thống kê số lượng đồ ăn và thức uống theo từng loại</h2>
+
+<!-- Thêm div để kiểm soát kích thước của canvas -->
+<div style="width: 100%; height: 400px;">
+    <canvas id="thongKeChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Hàm giải mã HTML entities thành ký tự gốc
+    function decodeHtmlEntities(text) {
+        var txt = document.createElement("textarea");
+        txt.innerHTML = text;
+        return txt.value;
+    }
+
+    // Tạo mảng labels và data từ dữ liệu model
+    var labels = [];
+    var data = [];
+
+    @foreach (var item in Model)
+    {
+        <text>
+            // Sử dụng hàm decodeHtmlEntities để giải mã các HTML entities
+            labels.push(decodeHtmlEntities('@item.TenLoaiXe'));
+        data.push(@item.SoLuongXe);
+        </text>
+    }
+
+            // Khởi tạo biểu đồ sử dụng Chart.js
+            var ctx = document.getElementById('thongKeChart').getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Số lượng đồ ăn và thức uống',
+                data: data,
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,  // Đảm bảo biểu đồ điều chỉnh kích thước
+            maintainAspectRatio: true,  // Đảm bảo tỷ lệ khung hình
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    });
+</script>
